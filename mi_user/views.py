@@ -1,0 +1,96 @@
+from audioop import reverse
+
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect,reverse
+from django.http import HttpResponse
+from . models import *
+import os
+
+# Create your views here.
+ 
+# 登陆视图
+def mi_login(request):
+    if request.method == 'POST':
+        form = milogin(request.POST)
+        if form.is_valid():
+            telephone = form.cleaned_data.get('telephone')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=telephone, password=password)
+            if user:
+                if user.is_active:
+                    login(request, user)
+                    # return render(request,'index.html')
+                    index_url = reverse('front_page:front_index')
+                    return redirect(index_url)
+        else:
+          return HttpResponse('验证失败')
+    else:
+        return render(request, 'mi_login.html')
+
+
+#注册视图
+def mi_register(request):
+    if request.method == 'GET':
+        return render(request, 'mi_register.html')
+    if request.method == 'POST':
+        form = miregister(request.POST)
+        if form.is_valid():
+            username = request.POST.get('username')
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+            telephone = request.POST.get('telephone')
+            if password1 != password2:
+               pass
+            else:
+                user = User.objects.create_user(telephone=telephone, username=username, password=password1)
+                return HttpResponse('注册成功')
+        else:
+            return HttpResponse('error')
+        return HttpResponse('mixin')
+# 用户上传课程视图
+def user_class_upload(request):
+        if request.method == 'GET':
+            # class_id = request.GET.get('class_id')
+            # lesson = mi_class.objects.get(id=class_id)
+            # print(lesson)
+            return render(request, 'user_class_upload.html')
+            # return HttpResponse('get')
+        if request.method == 'POST':
+            create_user = request.user.uid
+            user = User.objects.get(uid=create_user)
+            print(create_user)
+            file = request.FILES.getlist('myfile')
+            title = request.POST.get('title')
+            author = request.POST.get('author')
+            introduce = request.POST.get('introduce')
+            url= []
+            name = []
+            b = mi_class(title=title,author=author,introduce=introduce,create_user=user)
+            for i in file:
+                a=i.name
+                i = mi_voide(file_name=a, file=i)
+                i.save()
+                url.append(i)
+                name.append(a)
+                b.save()
+                b.file.add(i.id)
+            # return render(request, 'user_class_upload.html',{'url':url,'name':name, 'b':b})
+            return HttpResponse('success')
+
+
+def user_class_upload_id(request, class_id):
+    if request.method == 'GET':
+        class_id = class_id
+        lesson = mi_class.objects.get(id=class_id)
+        print(lesson)
+        print(type(lesson.file))
+        print(lesson.file)
+        return render(request, 'class_admin.html', {'lesson': lesson})
+def user_class(request):
+    user_now = request.user.uid
+    user = User.objects.get(uid=user_now)
+    user_class = user.create_user.all()
+    allclass=[]
+    for miclass in user_class:
+        allclass.append(miclass)
+    return render(request, 'user_class.html', {'allclass': allclass})

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的课程</title>
+    <script type="text/javascript" scr="{% static 'js/jQuery.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+</head>
+<body>
+{{  request.user.username  }}
+<form action={% url 'mi_user:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="请输入课程名字"/>
+    <br/>
+    <input type="text" name="author" placeholder="请输入作者"/>
+    <br/>
+      <textarea cols="20" rows="20" name="introduce">请描述下课程简介</textarea>
+    <br/>
+    <input type="file" name="myfile" multiple=True/>
+    <br/>
+    <input type="submit" id="btn">
+</form>
+
+
+
+</body>
+
+</html>

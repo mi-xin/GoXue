@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="form_login_div">
+    <form action="{% url 'mi_user:login' %}" method="post" class="form_login">
+        {% csrf_token %}
+       <div> <input type="text" name="telephone" placeholder="手机号"/></div>
+       <div> <input type="text" name="password" placeholder="密码"/></div>
+{#        <div><input type="checkbox" name='is_teacher'></div>#}
+        <button type="submit">提交</button>
+    </form>
+</div>
+</body>
+</html>

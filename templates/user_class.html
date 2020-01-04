@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课程</title>
+</head>
+<body>
+
+  {% for i in allclass %}
+    <a href={% url 'mi_user:user_class_upload_id' class_id=i.id %} >{{ i.title }}</a>
+    {% endfor %}
+</body>
+</html>

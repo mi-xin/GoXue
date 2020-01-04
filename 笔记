@@ -1,0 +1,5 @@
+https://www.cnblogs.com/ccorz/p/6357815.html  用户的验证
+https://blog.csdn.net/ak739105231/article/details/94596620  页面的跳转与交互
+https://www.cnblogs.com/mypath/p/6214851.html   判断用户是否登陆
+https://www.cnblogs.com/ivy-blogs/p/10649615.html https://www.cnblogs.com/jokezl/articles/10187237.html   引入静态文件
+python3 manage.py startapp HttpTest  创建app

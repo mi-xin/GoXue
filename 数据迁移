@@ -1,0 +1,3 @@
+https://blog.csdn.net/qq1981684148/article/details/80883421
+python manage.py makemigrations
+python manage.py migrate
