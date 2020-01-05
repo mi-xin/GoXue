@@ -22,5 +22,6 @@ urlpatterns = [
     path('register/', views.mi_register, name='register'),
     path('classUpload/', views.user_class_upload, name='user_class_upload'),
     path('classUpload/<int:class_id>/', views.user_class_upload_id, name='user_class_upload_id'),
+    path('class/damin',views.class_admin,name='class_admin'),
     path('class/', views.user_class, name='user_class'),
 ]

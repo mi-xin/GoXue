@@ -2,7 +2,7 @@ from audioop import reverse
 
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect,reverse
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from . models import *
 import os
 
@@ -56,24 +56,27 @@ def user_class_upload(request):
             return render(request, 'user_class_upload.html')
             # return HttpResponse('get')
         if request.method == 'POST':
+            # 获取当前登陆的用户id
             create_user = request.user.uid
+            # 获取当前用户对象
             user = User.objects.get(uid=create_user)
-            print(create_user)
+            # 前端获取数据
             file = request.FILES.getlist('myfile')
             title = request.POST.get('title')
             author = request.POST.get('author')
             introduce = request.POST.get('introduce')
             url= []
             name = []
+            # 创建课程对象
             b = mi_class(title=title,author=author,introduce=introduce,create_user=user)
+            b.save()
+            # 遍历上传的文件，并保存
             for i in file:
                 a=i.name
-                i = mi_voide(file_name=a, file=i)
+                i = mi_voide(file_name=a, file=i,class_name=b)
                 i.save()
                 url.append(i)
                 name.append(a)
-                b.save()
-                b.file.add(i.id)
             # return render(request, 'user_class_upload.html',{'url':url,'name':name, 'b':b})
             return HttpResponse('success')
 
@@ -82,15 +85,44 @@ def user_class_upload_id(request, class_id):
     if request.method == 'GET':
         class_id = class_id
         lesson = mi_class.objects.get(id=class_id)
-        print(lesson)
-        print(type(lesson.file))
-        print(lesson.file)
         return render(request, 'class_admin.html', {'lesson': lesson})
+    if request.method == 'POST':
+        pass
 def user_class(request):
-    user_now = request.user.uid
-    user = User.objects.get(uid=user_now)
-    user_class = user.create_user.all()
-    allclass=[]
-    for miclass in user_class:
-        allclass.append(miclass)
-    return render(request, 'user_class.html', {'allclass': allclass})
+    # 返回所有的课程
+    if request.method == 'GET':
+        user_now = request.user.uid
+        user = User.objects.get(uid=user_now)
+        user_class = user.create_user.all()
+        allclass=[]
+        for miclass in user_class:
+            allclass.append(miclass)
+        return render(request, 'user_class.html', {'allclass': allclass})
+
+def class_admin(request):
+    if request.is_ajax():
+        if request.POST.get('sign') =='update':
+           # 前端获取数据
+            class_id = request.POST.get('class_id')
+            class_title = request.POST.get('class_title')
+            class_introduce = request.POST.get('class_introduce')
+            class_author = request.POST.get('class_author')
+           #数据库查找对应id的课程
+            class_object = mi_class.objects.get(id=class_id)
+            if class_object.title != class_title:
+                class_object.title = class_title
+            if class_object.introduce != class_introduce:
+                class_object.introduce = class_introduce
+            if class_object.author != class_author:
+                class_object.author =class_author
+            class_object.save()
+        # response = JsonResponse({'class_title':class_title,
+        #                          'class_introduce':class_introduce,
+        #                          'class_author':class_author,
+        #                          'sssss':'sssss'})
+
+            response = JsonResponse({'class_title': class_object.title,
+                             'class_introduce': class_object.introduce,
+                             'class_author': class_object.author,
+                             'sssss': 'sssss'})
+            return response
