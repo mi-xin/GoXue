@@ -101,7 +101,7 @@ def user_class(request):
 
 def class_admin(request):
     if request.is_ajax():
-        if request.POST.get('sign') =='update':
+        if request.POST.get('sign') == 'update':
            # 前端获取数据
             class_id = request.POST.get('class_id')
             class_title = request.POST.get('class_title')
@@ -116,13 +116,19 @@ def class_admin(request):
             if class_object.author != class_author:
                 class_object.author =class_author
             class_object.save()
-        # response = JsonResponse({'class_title':class_title,
-        #                          'class_introduce':class_introduce,
-        #                          'class_author':class_author,
-        #                          'sssss':'sssss'})
-
             response = JsonResponse({'class_title': class_object.title,
                              'class_introduce': class_object.introduce,
                              'class_author': class_object.author,
-                             'sssss': 'sssss'})
+                            })
             return response
+        elif request.POST.get('sign') == 'del':
+            del_id = request.POST.get('del_id')
+            print(del_id)
+            del_object = mi_voide.objects.get(id=del_id)
+            print(del_object)
+            response = JsonResponse({'del_id':del_id})
+            return response
+            # return HttpResponse('11111')
+        else:
+            print(2222222222)
+            return HttpResponse('操作有误')
