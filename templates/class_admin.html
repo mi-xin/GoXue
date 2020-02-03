@@ -7,23 +7,30 @@
 </head>
 <body>
     <div>
+    <form action={% url 'mi_user:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
+        {% csrf_token %}
        <label>课程id</label> <input value="{{ lesson.id }}" name="class_id" id="class_id" ><br/>
          <label>课程名</label> <input value="{{ lesson.title }}" name="class_title" id="class_title"><br/>
         <label>课程简介</label> <textarea  name="class_introduce"  id="class_introduce">{{ lesson.introduce }}</textarea><br/>
          <label>课程作者</label> <input value="{{ lesson.author }}" name="class_author" id="class_author"><br/>
           <button type="button" id='sum'>确认修改</button><br/>
+         <input type="file" name="addfile" multiple=True />
+        <button type="submit">确认添加视频</button><br/>
+    </form>
+
+
         <label>课程视频</label><br/>
-    <table>
+    <table id="leasson_table">
         <tr>
             <th>文件名</th>
             <th>操作</th>
         </tr>
-        <tr>
-            {% for i in lesson.class_name.all %}
-            <td>{{ i.file_name }}</td>
-            <td><button id="del" data-delid={{ i.id }}>删除</button></td>
+         {% for i in lesson.class_name.all %}
+        <tr class={{ i.id }}>
+            <td ><spean >{{ i.file_name }}</spean></td>
+            <td ><button class="del" data-delid={{ i.id }}>删除</button></td>
         </tr>
-            {% endfor %}
+         {% endfor %}
     </table>
     </div>
     </div>
@@ -47,12 +54,13 @@
                'csrfmiddlewaretoken':'{{ csrf_token }}',
             },
             success:function (res) {
-                pass
+                alert('修改成功')
       }
         })
       });
-        $('#del').click(function () {
-            var del_id = $("#del").data("delid")
+        $('.del').on('click',function () {
+            var del_id = $(".del").data("delid");
+            var class_id = $('#class_id').val();
             $.ajax({
             url:"/user/class/damin",
             type:"POST",
@@ -60,11 +68,15 @@
             data:{
                 'sign':'del',  //删除视频标志
                 'del_id':del_id, //删除视频id
+                'class_id':class_id, //课程的id
                'csrfmiddlewaretoken':'{{ csrf_token }}',
             },
             success:function (res) {
-                pass
-            }
+                {#alert(res.class_object.title)#}
+                $('.'+del_id).remove()
+            },error:function () {
+                    alert('失败了')
+                }
             })
 
         })
