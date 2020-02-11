@@ -49,16 +49,13 @@ def mi_register(request):
         return HttpResponse('mixin')
 # 用户上传课程视图
 def user_class_upload(request):
-        print(1111111)
         if request.method == 'GET':
             # class_id = request.GET.get('class_id')
             # lesson = mi_class.objects.get(id=class_id)
-            # print(lesson)
             return render(request, 'user_class_upload.html')
             # return HttpResponse('get')
         if request.method == 'POST':
             class_id = request.POST.get('class_id')
-            print(class_id)
             if class_id is not None:
                 class_boject = mi_class.objects.get(id=class_id)
                 file = request.FILES.getlist('addfile')
@@ -72,17 +69,18 @@ def user_class_upload(request):
                 title = request.POST.get('title')
                 author = request.POST.get('author')
                 introduce = request.POST.get('introduce')
+                imgfile = request.FILES.getlist('img')[0]
+                print(imgfile)
                 url= []
                 name = []
                 # 创建课程对象
-                class_boject = mi_class(title=title,author=author,introduce=introduce,create_user=user)
+                class_boject = mi_class(title=title,author=author,introduce=introduce,create_user=user,class_image=imgfile)
                 class_boject.save()
             # 遍历上传的文件，并保存
             for i in file:
                 a=i.name
                 i = mi_voide(file_name=a, file=i,class_name=class_boject)
                 i.save()
-                print(i)
                 # url.append(i)
                 # name.append(a)
             lesson = mi_class.objects.get(id=class_boject.id)
@@ -138,5 +136,4 @@ def class_admin(request):
             response = JsonResponse({'del_id':del_id})
             return response
         else:
-            print(2222222222)
             return HttpResponse('操作有误')

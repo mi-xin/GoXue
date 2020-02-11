@@ -11,13 +11,17 @@
 {{  request.user.username  }}
 <form action={% url 'mi_user:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
     {% csrf_token %}
+
     <input type="text" name="title" placeholder="请输入课程名字"/>
     <br/>
     <input type="text" name="author" placeholder="请输入作者"/>
     <br/>
       <textarea cols="20" rows="20" name="introduce" placeholder="请描述下课程简介"></textarea>
     <br/>
-    <input type="file" name="myfile" multiple=True/>
+    <h5>上传课程视频</h5>
+    <input type="file" name="myfile" multiple=True placeholder="上传视频"/>
+    <h5>上传课程封面</h5>
+    <input name="img" type="file" placeholder="上传封面">
     <br/>
     <input type="submit" id="btn">
 </form>

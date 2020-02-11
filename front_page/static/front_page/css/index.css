@@ -5,19 +5,64 @@ html,body{
 				padding: 0;
 				margin: 0;
 			}
-			.header{
-				width:80%;
-				/* text-align: center; */
-				margin: 30px auto;
-				 overflow:auto;
-                background-color:white;
-			}
-			.header_left{
-				float: left;
-			}
-			.header_right{
-				float: right;
-			}
-            .header_span{
-                margin: 0px 5px;
-            }
+/*头部css*/
+.header{
+	width:80%;
+	/* text-align: center; */
+	margin: 30px auto;
+	margin-bottom: 0;
+	overflow:auto;
+	background-color:white;
+}
+.header_left{
+	float: left;
+}
+.header_right{
+	float: right;
+}
+.header_span{
+	margin: 0px 5px;
+}
+/*内容css*/
+.index_title{
+	/*background-color:#5bc0de;*/
+	/*margin: 5px auto;*/
+	padding: 10px auto;
+	text-align: center;
+}
+.content{
+	width:80%;
+	/* text-align: center; */
+	margin: 0 auto;
+	overflow:auto;
+	background-color:white;
+}
+.class_item{
+	display: inline-block;
+	width:23%;
+	height:180px;
+	/* text-align: center; */
+	margin: 10px;
+	overflow:auto;
+	background-color:white;
+	border:1px solid #e5e5e5;
+}
+.class_picture{
+	display: block;
+	width: 220px;
+	height: 124px;
+}
+.class_title{
+	display: block;
+}
+.class_author{
+	display: block;
+}
+/*尾部css*/
+.footer{
+	width:80%;
+	/* text-align: center; */
+	margin: 0 auto;
+	overflow:auto;
+	background-color:white;
+}

@@ -127,6 +127,7 @@ AUTH_USER_MODEL = 'mi_user.User'
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR,"wenjian")
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 

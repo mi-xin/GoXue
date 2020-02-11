@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div class="header">
+    <div class="header">
 			<span class="header_left">这是图标的位置</span>
 			<span class="header_right">
                 {% if request.user.is_authenticated %}
@@ -22,9 +22,18 @@
                 <span><a href="{% url 'mi_user:register' %}">注册</a></span>
                 {% endif %}
             </span>
-		</div>
-		<div class="content">我是内容部分</div>
-		<div class="footer">我是尾部</div>
+    </div>
+    <div class="content">
+    <h2 class="index_title">推荐课程</h2>
+        {% for i in show_class%}
+        <div class="class_item">
+            <spean class="class_picture">图片</spean>
+            <spean class="class_title">{{ i.title }}</spean>
+            <spean class="class_author">{{ i.author }}</spean>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="footer">我是尾部</div>
 
 </body>
 </html>
