@@ -13,6 +13,9 @@
          <label>课程名</label> <input value="{{ lesson.title }}" name="class_title" id="class_title"><br/>
         <label>课程简介</label> <textarea  name="class_introduce"  id="class_introduce">{{ lesson.introduce }}</textarea><br/>
          <label>课程作者</label> <input value="{{ lesson.author }}" name="class_author" id="class_author"><br/>
+         <label>课程封面</label> <br/>
+        <img src="{{ MEDIA_URL }}{{ lesson.class_image }}" name="class_img" id="class_img" height=100 width=100><br/>
+        {{lesson.class_image.url }}
           <button type="button" id='sum'>确认修改</button><br/>
          <input type="file" name="addfile" multiple=True />
         <button type="submit">确认添加视频</button><br/>

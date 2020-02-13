@@ -13,8 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import path,re_path
 from . import views
+
 
 app_name = 'mi_user'
 urlpatterns = [
@@ -24,4 +25,6 @@ urlpatterns = [
     path('classUpload/<int:class_id>/', views.user_class_upload_id, name='user_class_upload_id'),
     path('class/damin',views.class_admin,name='class_admin'),
     path('class/', views.user_class, name='user_class'),
+    # 处理 media 信息，用于图片获取
+
 ]

@@ -61,11 +61,11 @@ class milogin(forms.Form):
     telephone = forms.CharField(max_length=11, required=True)
 
 class mi_voide(models.Model):
-    file = models.FileField(upload_to="wenjian")
+    file = models.FileField(upload_to="video")
     file_name = models.CharField(max_length=100)
     class_name = models.ForeignKey('mi_class', related_name='class_name', on_delete='CASCADE')
 class mi_class(models.Model):
-    class_image = models.ImageField(verbose_name='封面图',upload_to='img',blank=True)
+    class_image = models.ImageField(verbose_name='封面图',upload_to='img/',blank=True)
     title = models.CharField(max_length=100)
     file = models.ManyToManyField('mi_voide')
     introduce = models.TextField()

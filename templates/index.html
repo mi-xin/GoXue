@@ -27,7 +27,7 @@
     <h2 class="index_title">推荐课程</h2>
         {% for i in show_class%}
         <div class="class_item">
-            <spean class="class_picture">图片</spean>
+           <a> <img class="class_picture" src="{{ i.class_image.url }}" alt="课程封面" width="220px" height="124px"/></a>
             <spean class="class_title">{{ i.title }}</spean>
             <spean class="class_author">{{ i.author }}</spean>
         </div>

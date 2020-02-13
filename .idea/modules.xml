@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/GoXue.iml" filepath="$PROJECT_DIR$/.idea/GoXue.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Xue.iml" filepath="$PROJECT_DIR$/.idea/Xue.iml" />
     </modules>
   </component>
 </project>
