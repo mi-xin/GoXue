@@ -7,9 +7,9 @@
 </head>
 <body>
     <div>
-    <form action={% url 'mi_user:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
+    <form action={% url 'mi_class:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
         {% csrf_token %}
-       <label>课程id</label> <input value="{{ lesson.id }}" name="class_id" id="class_id" ><br/>
+       <label >课程id</label> <input value="{{ lesson.id }}" name="class_id" id="class_id" ><br/>
          <label>课程名</label> <input value="{{ lesson.title }}" name="class_title" id="class_title"><br/>
         <label>课程简介</label> <textarea  name="class_introduce"  id="class_introduce">{{ lesson.introduce }}</textarea><br/>
          <label>课程作者</label> <input value="{{ lesson.author }}" name="class_author" id="class_author"><br/>
@@ -45,7 +45,7 @@
           var class_author = $('#class_author').val()
           var class_introduce = $('#class_introduce').val()
         $.ajax({
-            url:"/user/class/damin",
+            url:"/class/class/damin",
              type:"POST",
             dataType:"json",
             data:{
@@ -65,7 +65,7 @@
             var del_id = $(".del").data("delid");
             var class_id = $('#class_id').val();
             $.ajax({
-            url:"/user/class/damin",
+            url:"/class/class/damin",
             type:"POST",
             dataType:"json",
             data:{

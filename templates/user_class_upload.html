@@ -9,7 +9,7 @@
 </head>
 <body>
 {{  request.user.username  }}
-<form action={% url 'mi_user:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
+<form action={% url 'mi_class:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
     {% csrf_token %}
 
     <input type="text" name="title" placeholder="请输入课程名字"/>

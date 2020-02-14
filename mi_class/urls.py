@@ -13,18 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include,re_path
-from front_page import urls
-from mi_user import urls
-from mi_class import urls
-from django.views.static import serve
-from GoXue.settings import MEDIA_ROOT
+from django.urls import path,re_path
+from . import views
 
+
+app_name = 'mi_class'
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('front_page.urls')),
-    path('user/', include('mi_user.urls')),
-    path('class/',include('mi_class.urls')),
-    re_path(r'wenjian/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),]
+    path('classUpload/', views.user_class_upload, name='user_class_upload'),
+    path('classUpload/<int:class_id>/', views.user_class_upload_id, name='user_class_upload_id'),
+    path('class/damin',views.class_admin,name='class_admin'),
+    path('class/', views.user_class, name='user_class'),
+    path('video/<int:class_id>/', views.video_play, name='video_play_id'),
+    path('video/switch/', views.switch_play, name='video_play_switch'),
 
+]

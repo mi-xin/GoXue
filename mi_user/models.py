@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin, BaseUserManager
 from shortuuidfield import ShortUUIDField
 from django import forms
+from mi_class.models import *
 import os
 # 重写 UserMangager
 class UserManager(BaseUserManager):
@@ -60,15 +61,3 @@ class milogin(forms.Form):
     password = forms.CharField(max_length=30, required=True)
     telephone = forms.CharField(max_length=11, required=True)
 
-class mi_voide(models.Model):
-    file = models.FileField(upload_to="video")
-    file_name = models.CharField(max_length=100)
-    class_name = models.ForeignKey('mi_class', related_name='class_name', on_delete='CASCADE')
-class mi_class(models.Model):
-    class_image = models.ImageField(verbose_name='封面图',upload_to='img/',blank=True)
-    title = models.CharField(max_length=100)
-    file = models.ManyToManyField('mi_voide')
-    introduce = models.TextField()
-    author = models.CharField(max_length=15, default='aa')
-    create_user = models.ForeignKey('User',related_name = 'create_user', on_delete='CASCADE')
-    is_release = models.BooleanField(verbose_name='是否已发布',default=False)

@@ -2,9 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>课程详情页面</title>
+    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
 </head>
 <body>
-    
+<div id="play_div">
+      <video id="play"  controls="controls" width="870px" height="520px">
+          <source class="play_class" src="{{ MEDIA_URL }}{{ lesson.class_name.first.file}}" type="audio/ogg">
+      </video>
+</div>
+
+    <br/>
+ {% for i in lesson.class_name.all %}
+        <tr >
+            <button class="switch" data-id="{{ i.id }}">{{ i.file_name }}</button><br/>
+        </tr>
+ {% endfor %}
+<script>
+    $(document).ready(function(){
+      $(".switch").click(function(){
+         var play_id = $(this).data("id");
+        $.ajax({
+            url:"/class/video/switch/",
+             type:"POST",
+            dataType:"json",
+            data:{
+                'play_id':play_id,
+                'sign':'switch',  //修改信息
+               'csrfmiddlewaretoken':'{{ csrf_token }}',
+            },
+            success:function (res) {
+                $('#play').remove()
+                $('#play_div').append(' <video id="play"  controls="controls" width="870px" height="520px"><source class="play_class" src=res.play_src type="audio/ogg"></video>')
+                var class_object = $('.play_class');
+                class_object.attr('src',res.play_src)
+
+      },error:function () {
+                    alert('失败了')
+                }
+        })
+      });
+    });
+</script>
 </body>
+
 </html>
