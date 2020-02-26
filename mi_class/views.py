@@ -56,9 +56,7 @@ def user_class_upload_id(request, class_id):
         return render(request, 'class_admin.html', {'lesson': lesson})
     if request.method == 'POST':
         pass
-
-
-# 返回所有的课程
+# 课程的展示
 def user_class(request,sign):
     if request.method == 'GET':
         print(sign)
@@ -67,18 +65,13 @@ def user_class(request,sign):
         global user_class
         allclass = []
         if sign == 'all':
-            print(1111)
             user_class = user.create_user.all()
-            print(user_class)
         if sign =='yes':
-            print(222)
             user_class = user.create_user.filter(is_release=1)
         if sign =='no':
-            print(333)
             user_class = user.create_user.filter(is_release=0)
         for i in user_class:
             allclass.append(i)
-            print(8888)
         return render(request, 'user_class.html', {'allclass': allclass})
 # 课程视频管理的方法
 def class_admin(request):

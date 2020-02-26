@@ -47,3 +47,10 @@ def mi_register(request):
         else:
             return HttpResponse('error')
         return HttpResponse('mixin')
+
+# 显示个人信息
+def user_information(request):
+    if request.method == 'GET':
+        user_id = request.user.uid
+        user_object  =User.objects.filter(uid= user_id)[0]
+        return render(request, 'information.html',{'user':user_object},)
