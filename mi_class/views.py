@@ -59,33 +59,27 @@ def user_class_upload_id(request, class_id):
 
 
 # 返回所有的课程
-def user_class(request):
+def user_class(request,sign):
     if request.method == 'GET':
+        print(sign)
         user_now = request.user.uid
         user = User.objects.get(uid=user_now)
-        user_class = user.create_user.all()
+        global user_class
         allclass = []
-        for miclass in user_class:
-            allclass.append(miclass)
-        return render(request, 'user_class.html', {'allclass': allclass})
-    if request.method == 'POST':
-        user_now = request.user.uid
-        user = User.objects.get(uid=user_now)
-        if request.POST.get('sign') == 'all':
+        if sign == 'all':
+            print(1111)
             user_class = user.create_user.all()
-        elif request.POST.get('sign') == 'yes':
+            print(user_class)
+        if sign =='yes':
+            print(222)
             user_class = user.create_user.filter(is_release=1)
-        elif request.GET.get('sign') == 'not':
+        if sign =='no':
+            print(333)
             user_class = user.create_user.filter(is_release=0)
-        allclass = []
-        for miclass in user_class:
-            allclass.append(miclass)
-        response = JsonResponse({'allclass': allclass})
-        print(request.POST.get('sign'))
-        print(allclass)
-        return response
-
-
+        for i in user_class:
+            allclass.append(i)
+            print(8888)
+        return render(request, 'user_class.html', {'allclass': allclass})
 # 课程视频管理的方法
 def class_admin(request):
     if request.is_ajax():

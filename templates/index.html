@@ -15,7 +15,7 @@
 			<span class="header_left">这是图标的位置</span>
 			<span class="header_right">
                 {% if request.user.is_authenticated %}
-                    <span class="header_span"><a href="{% url  'mi_class:user_class' %}">我的课程</a></span>
+                    <span class="header_span"><a href="{% url  'mi_class:user_class' sign='all' %}">我的课程</a></span>
                  <span  class="header_span"><a>{{ request.user.username }}</a></span>
                 {% else %}
                     <span><a href="{% url 'mi_user:login' %}">登陆</a></span>

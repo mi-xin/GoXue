@@ -17,9 +17,9 @@
  <div class="content">
      <div class="content-left">
         <ul class="left_ul">
-            <li class="left_li li_border a_class" data-sign="all"><a>所有课程</a></li>
-            <li class="left_li" class="a_class" data-sign="yes"><a >已发布课程</a></li>
-            <li class="left_li" class="a_class" data-sign="not"><a>未发布课程</a></li>
+            <li class="left_li li_border a_class" data-sign="all"><a href="{% url 'mi_class:user_class' sign='all' %}">所有课程</a></li>
+            <li class="left_li" class="a_class" data-sign="yes"><a href="{% url 'mi_class:user_class' sign='yes' %}">已发布课程</a></li>
+            <li class="left_li" class="a_class" data-sign="not"><a href="{% url 'mi_class:user_class' sign='no' %}">未发布课程</a></li>
         </ul>
      </div>
       <div class="content-right">
@@ -42,27 +42,5 @@
      {% endfor %}
       </div>
  </div>
-<script>
-    $(document).ready(function(){
-        $('.a_class').on('click',function(){
-            alert('测试')
-            var sign = $(this).data(sign)
-            $.ajax({
-                url:"class/class/",
-                type:"POST",
-                dataType:"json",
-                data:{
-                    'sign':sign, //标记
-                   'csrfmiddlewaretoken':'{{ csrf_token }}',
-                },
-                success:function(res){
-                    alert('成功')
-                },error:function(res){
-                    alert(res+'失败')
-                }
-            })
-        })
-    })
-</script>
 </body>
 </html>
