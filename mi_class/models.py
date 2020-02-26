@@ -13,3 +13,4 @@ class mi_class(models.Model):
     author = models.CharField(max_length=15, default='aa')
     create_user = models.ForeignKey('mi_user.User',related_name = 'create_user', on_delete='CASCADE')
     is_release = models.BooleanField(verbose_name='是否已发布',default=False)
+    create_data = models.DateTimeField(auto_now_add=True)

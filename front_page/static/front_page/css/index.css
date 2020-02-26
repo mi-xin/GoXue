@@ -7,6 +7,7 @@ html,body{
 			}
 /*头部css*/
 .header{
+	height: 50px;
 	width:80%;
 	/* text-align: center; */
 	margin: 30px auto;
@@ -16,12 +17,16 @@ html,body{
 }
 .header_left{
 	float: left;
+	margin-left: 28px;
+	line-height: 50px;
 }
 .header_right{
 	float: right;
+	margin-right: 28px;
+	line-height: 50px;
 }
 .header_span{
-	margin: 0px 5px;
+	margin-left: 28px;
 }
 /*内容css*/
 .index_title{
