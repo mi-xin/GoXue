@@ -11,9 +11,9 @@ ul,a:hover{
 }
 .outside_div{
     width: 60%;
-    height: 60%;
     background-color: white;
     margin: 50px auto;
+    position:relative;
 }
 .title{
     color: #31b0d5;
@@ -22,21 +22,60 @@ ul,a:hover{
 .title_cont{
     padding-left: 30px;
 }
-.update{
-    display: block;
-    border:1px solid #31b0d5 ;
+.update_div,.update_password{
+    width: 260px;
+    background-color:#31b0d5;
+    margin: 40px auto;
+    padding-top: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    position:relative;
+    top:-330px;
+    display:none;
+    z-index:9;
+}
+.form_input{
+    width: 260px;
+    margin-bottom: 5px;
+}
+.update,.update_word{
+     display: inline-block;
+    border:1px solid white ;
     border-radius:5px ;
     width: 120px;
     height: 35px;
-    margin: 100px auto;
     text-align: center;
     background-color: #31b0d5;
     color: white;
     font-sizesize: 18px;
 }
-.update_div{
-    width: 300px;
-    height: 300px;
-    background-color:white;
+.update_commit,.update_cancle{
+    display: inline-block;
+    border:1px solid white ;
+    border-radius:5px ;
+    width: 120px;
+    height: 35px;
+    text-align: center;
+    background-color: white;
+    color: #31b0d5;
+    font-sizesize: 18px;
     margin: 10px auto;
+}
+.update_laber{
+    display: block;
+    margin-bottom: 5px;
+}
+.box{
+    width: 100%;
+    height: 100%;
+    background-color:#777777;
+    position:absolute;
+    top: 0px;
+    opacity: 0.5;
+     z-index:8;
+    display: none;
+}
+.button_div{
+    text-align: center;
+    margin: 60px auto;
 }

@@ -61,3 +61,7 @@ class milogin(forms.Form):
     password = forms.CharField(max_length=30, required=True)
     telephone = forms.CharField(max_length=11, required=True)
 
+# 修改密码校验
+class udpassword(forms.Form):
+    old_password = forms.CharField(max_length=30, required=True)
+    new_password = forms.CharField(max_length=30, required=True)

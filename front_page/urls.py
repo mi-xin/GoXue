@@ -19,4 +19,5 @@ app_name = 'front_page'
 
 urlpatterns = [
     path('', views.mi_index, name='front_index'),
+    path('page/<int:index>/', views.mi_page, name='page_start')
 ]

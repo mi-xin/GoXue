@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect,reverse
 from django.http import HttpResponse,JsonResponse
 from . models import *
 from mi_user.models import *
-
+from django.core.paginator import Paginator , PageNotAnInteger,EmptyPage
 # Create your views here.
 import os
 # 用户上传课程视图
@@ -70,9 +70,18 @@ def user_class(request,sign):
             user_class = user.create_user.filter(is_release=1)
         if sign =='no':
             user_class = user.create_user.filter(is_release=0)
-        for i in user_class:
-            allclass.append(i)
-        return render(request, 'user_class.html', {'allclass': allclass})
+        paginator = Paginator(user_class, 1, 0)
+        try:
+            # 获取index的值，如果没有，则设置使用默认值1
+            num = request.GET.get('index', '1')
+            # 获取第几页
+            number = paginator.page(num)
+        except PageNotAnInteger:
+            # 如果输入的页码数不是整数，那么显示第一页数据
+            number = paginator.page(1)
+        except EmptyPage:
+            number = paginator.page(paginator.num_pages)
+        return render(request, 'user_class.html', {'page':number,'paginator':paginator})
 # 课程视频管理的方法
 def class_admin(request):
     if request.is_ajax():

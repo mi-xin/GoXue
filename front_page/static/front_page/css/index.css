@@ -7,7 +7,7 @@ html,body{
 			}
 /*头部css*/
 .header{
-	height: 50px;
+	height: 100px;
 	width:80%;
 	/* text-align: center; */
 	margin: 30px auto;
@@ -63,6 +63,11 @@ html,body{
 .class_author{
 	display: block;
 }
+/*分页css*/
+.page_div{
+	margin: 10px auto;
+	text-align: center;
+}
 /*尾部css*/
 .footer{
 	width:80%;
@@ -70,4 +75,7 @@ html,body{
 	margin: 0 auto;
 	overflow:auto;
 	background-color:white;
+}
+.infomation_slect{
+
 }
