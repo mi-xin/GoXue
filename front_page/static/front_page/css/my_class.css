@@ -19,6 +19,7 @@ ul,a:hover{
 	overflow:auto;
 	background-color:white;
 	vertical-align: middle;
+	 position:relative;
 }
 .header_left{
 	float: left;
@@ -29,6 +30,7 @@ ul,a:hover{
 	float: right;
 	margin-right: 28px;
 	line-height: 50px;
+	position:relative;
 }
 .header_span{
 	margin-left: 28px;
@@ -48,9 +50,7 @@ ul,a:hover{
 	background-color: white;
 	/*border:1px solid #5bc0de;*/
 }
-/*.content-left:hover{*/
-/*	box-shadow:1px 1px 1px #5bc0de;*/
-/*}*/
+
 .content-right{
 	float: left;
 	overflow: auto;

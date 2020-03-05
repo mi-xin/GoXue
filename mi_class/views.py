@@ -133,3 +133,5 @@ def switch_play(request):
         play_src = play_object.file.url
         response = JsonResponse({'play_src': play_src,})
         return response
+
+# 课程搜索方法

@@ -7,75 +7,74 @@
     <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
 </head>
 <body>
-    <div class="outside_div">
-        <h2  style="text-align: center;color:#31b0d5;padding-top: 20px">
-            个人信息
-        </h2>
-        <h3 class="title">用户名</h3>
-            <span class="title_cont"> {{  user.username}}</span>
-        <h3 class="title">登陆手机</h3>
-            <span class="title_cont">{{ user.telephone }}</span>
-{#        <h3 class="title">密码</h3>#}
-{#            <span class="title_cont">看不到唔</span>#}
-         <h3 class="title">邮箱</h3>
-            {% if user.email is None %}
-                <span class="title_cont">暂未绑定邮箱</span>
-            {% else %}
-                <span class="title_cont">{{ user.email }}</span>
-            {% endif %}
+<div class="outside_div">
+    <h2 style="text-align: center;color:#31b0d5;padding-top: 20px">
+        个人信息
+    </h2>
+    <h3 class="title">用户名</h3>
+    <span class="title_cont"> {{ user.username }}</span>
+    <h3 class="title">登陆手机</h3>
+    <span class="title_cont">{{ user.telephone }}</span>
+    {#        <h3 class="title">密码</h3>#}
+    {#            <span class="title_cont">看不到唔</span>#}
+    <h3 class="title">邮箱</h3>
+    {% if user.email is None %}
+        <span class="title_cont">暂未绑定邮箱</span>
+    {% else %}
+        <span class="title_cont">{{ user.email }}</span>
+    {% endif %}
     <div class="button_div">
-         <button class="update">修改信息</button>
+        <button class="update">修改信息</button>
         <button class="update_word">修改密码</button>
     </div>
+</div>
+<div class="update_div" style="hidden:hidden">
+    <form method="post" action="{% url 'mi_user:update_information' %}">
+        {% csrf_token %}
+        <label class="update_laber">用户名:</label>
+        <input name="username" class="form_input"/><br/>
+        {#             <label class="update_laber">密码</label>#}
+        {#            <input  name="password" class="form_input"/><br/>#}
+        <label class="update_laber">邮箱</label>
+        <input name="email" class="form_input"/><br/>
+        <button class="update_commit" type="submit">确认修改</button>
+        <button class="update_cancle" type="reset">取消修改</button>
+    </form>
+</div>
+<div class="update_password" style="hidden:hidden">
+    <form method="post" action="{% url 'mi_user:updatepassword' %}">
+        {% csrf_token %}
+        <label class="update_laber">旧密码</label>
+        <input name="old_password" class="form_input"/><br/>
+        <label class="new_password">新密码</label>
+        <input name="new_password" class="form_input"/><br/>
+        <button class="update_commit" type="submit">确认修改</button>
+        <button class="update_cancle" type="reset">取消修改</button>
+    </form>
+</div>
+<div class="box">
 
-    </div>
-    <div class="update_div" style="hidden:hidden">
-        <form  method="post" action="{% url 'mi_user:update_information' %}">
-             {% csrf_token %}
-            <label class="update_laber">用户名:</label>
-            <input  name="username" class="form_input"/><br/>
-{#             <label class="update_laber">密码</label>#}
-{#            <input  name="password" class="form_input"/><br/>#}
-            <label class="update_laber">邮箱</label>
-            <input  name="email" class="form_input"/><br/>
-            <button  class="update_commit" type="submit">确认修改</button>
-            <button  class="update_cancle" type="reset">取消修改</button>
-        </form>
-    </div>
-    <div class="update_password" style="hidden:hidden">
-        <form  method="post" action="{% url 'mi_user:updatepassword' %}">
-             {% csrf_token %}
-            <label class="update_laber">旧密码</label>
-            <input  name="old_password" class="form_input"/><br/>
-            <label class="new_password">新密码</label>
-            <input  name="new_password" class="form_input"/><br/>
-            <button  class="update_commit" type="submit">确认修改</button>
-            <button  class="update_cancle" type="reset">取消修改</button>
-        </form>
-    </div>
-    <div class="box">
-
-    </div>
+</div>
 <script>
-    $(document).ready(function(){
-        $('.update').on('click',function(){
-            $('.update_div').css('display','block');
-            $('.box').css('display','block');
+    $(document).ready(function () {
+        $('.update').on('click', function () {
+            $('.update_div').css('display', 'block');
+            $('.box').css('display', 'block');
         });
-         $('.update_word').on('click',function(){
-            $('.update_password').css('display','block');
-            $('.box').css('display','block');
+        $('.update_word').on('click', function () {
+            $('.update_password').css('display', 'block');
+            $('.box').css('display', 'block');
         });
 
-        $('.update_commit').on('click',function(){
-            $('.update_div').css('display','none');
-             $('.update_password').css('display','none');
-            $('.box').css('display','none');
+        $('.update_commit').on('click', function () {
+            $('.update_div').css('display', 'none');
+            $('.update_password').css('display', 'none');
+            $('.box').css('display', 'none');
         });
-         $('.update_cancle').on('click',function(){
-            $('.update_div').css('display','none');
-             $('.update_password').css('display','none');
-            $('.box').css('display','none');
+        $('.update_cancle').on('click', function () {
+            $('.update_div').css('display', 'none');
+            $('.update_password').css('display', 'none');
+            $('.box').css('display', 'none');
         })
     })
 </script>

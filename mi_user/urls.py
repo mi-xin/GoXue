@@ -20,6 +20,7 @@ app_name = 'mi_user'
 urlpatterns = [
     path('login/', views.mi_login, name='login'),
     path('register/', views.mi_register, name='register'),
+    path('logout/', views.mi_logout, name='logout'),
     path('information/', views.user_information, name='user_information'),
     path('information/update/',views.update_information,name='update_information'),
     path('information/updatepassword/',views.update_password,name='updatepassword')

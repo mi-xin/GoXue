@@ -5,13 +5,20 @@
     <title>我的课程</title>
     <script type="text/javascript" scr="{% static 'js/jQuery.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-
+    <link rel="stylesheet" href="/static/front_page/css/upload_class.css">
 </head>
 <body>
-{{  request.user.username  }}
-<form action={% url 'mi_class:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
+<div class="father_div">
+    <div class="header">
+        <ul class="header_ul">
+            <li><a>首页</a></li>
+            <li><a>个人中心</a></li>
+        </ul>
+    </div>
+</div>
+<div class="upload_div">
+    <form  action={% url 'mi_class:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
     {% csrf_token %}
-
     <input type="text" name="title" placeholder="请输入课程名字"/>
     <br/>
     <input type="text" name="author" placeholder="请输入作者"/>
@@ -25,8 +32,7 @@
     <br/>
     <input type="submit" id="btn">
 </form>
-
-
+</div>
 
 </body>
 

@@ -25,5 +25,4 @@ urlpatterns = [
     path('class/<str:sign>/', views.user_class, name='user_class'),
     path('video/<int:class_id>/', views.video_play, name='video_play_id'),
     path('video/switch/', views.switch_play, name='video_play_switch'),
-
 ]

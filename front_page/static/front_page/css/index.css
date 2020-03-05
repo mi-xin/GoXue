@@ -15,6 +15,10 @@ html,body{
 	overflow:auto;
 	background-color:white;
 }
+ul,a:hover{
+	text-decoration:none;
+	list-style-type:none;
+}
 .header_left{
 	float: left;
 	margin-left: 28px;
@@ -28,6 +32,50 @@ html,body{
 .header_span{
 	margin-left: 28px;
 }
+/*搜索框*/
+.search_div{
+	display: flex;
+	float: right;
+	height: 50px;
+	padding-top: 13px;
+}
+.search_input{
+	width: 260px;
+}
+.search_btn{
+	background-color:#31b0d5;
+	border:1px solid white;
+	border-radius: 3px;
+	width: 60px;
+	color: white;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+.infomation_slect{
+	width: 100px;
+	height: 100px;
+	background-color:white;
+	border: #5bc0de solid 1px;
+	position:absolute;
+	right: 158px;
+	top: 65px;
+	z-index: 10;
+	float: none;
+	align-items: center;
+	display: none;
+}
+.infomation_slect ul{
+	padding-inline-start: 0px;
+	text-align: center;
+}
+.infomation_slect li:hover{
+	background-color:#5bc0de;
+	color: white;
+}
+.infomation_slect a:hover{
+	color: white;
+}
+
 /*内容css*/
 .index_title{
 	/*background-color:#5bc0de;*/
@@ -75,7 +123,4 @@ html,body{
 	margin: 0 auto;
 	overflow:auto;
 	background-color:white;
-}
-.infomation_slect{
-
 }

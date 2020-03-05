@@ -26,5 +26,7 @@ urlpatterns = [
     path('', include('front_page.urls')),
     path('user/', include('mi_user.urls')),
     path('class/',include('mi_class.urls')),
-    re_path(r'wenjian/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),]
+    re_path(r'wenjian/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
+    path('search/', include('haystack.urls')),  # 全文检索路由
+    ]
 
