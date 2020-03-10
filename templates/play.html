@@ -4,44 +4,74 @@
     <meta charset="UTF-8">
     <title>课程详情页面</title>
     <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <link rel="stylesheet" href="/static/front_page/css/play.css">
 </head>
 <body>
+<div class="header">
+    <ul class="header_ul">
+        <li class="header_li"><a href="{% url 'front_page:front_index' %}">首页</a></li>
+        <li class="header_li"><a href="{% url 'mi_user:user_information' %}">个人中心</a></li>
+    </ul>
+</div>
 <div id="play_div">
-      <video id="play"  controls="controls" width="870px" height="520px">
-          <source class="play_class" src="{{ MEDIA_URL }}{{ lesson.class_name.first.file}}" type="audio/ogg">
-      </video>
+    <div class="play_div">
+        <video id="play" controls="controls" width="980px" height="520px">
+            <source class="play_class" src="{{ MEDIA_URL }}{{ chapter_lists.0.video_objects.first.file }}" type="audio/ogg">
+        </video>
+    </div>
+    <div class="details">
+        <h2 class="heading">{{ lesson.title }}</h2>
+        <span class="heading">{{ lesson.author }}</span>
+        <h4 class="heading" style="color: black; margin-block-start: 0.3em;">课程简介</h4>
+        <span class="heading" style="margin-left: 20px">{{ lesson.introduce }}</span>
+
+    </div>
+    <table class="leasson_table">
+        {% if chapter_lists %}
+            {% for i in chapter_lists %}
+                <th style="float: left">第{{ forloop.counter }}章：{{ i.chapter_object.name }}</th>
+                {% for j in i.video_objects %}
+                    <tr class={{ j.id }} >
+                        <td>
+                            <button class="switch" data-id="{{ j.id }}" type="button">{{ j.file_name }}</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            作者比较懒，没有上传视频哦！
+        {% endif %}
+    </table>
+</div>
+<div class="footer">软件1731-肖沵鑫的毕业设计<br/>
+    171414337
 </div>
 
-    <br/>
- {% for i in lesson.class_name.all %}
-        <tr >
-            <button class="switch" data-id="{{ i.id }}">{{ i.file_name }}</button><br/>
-        </tr>
- {% endfor %}
 <script>
-    $(document).ready(function(){
-      $(".switch").click(function(){
-         var play_id = $(this).data("id");
-        $.ajax({
-            url:"/class/video/switch/",
-             type:"POST",
-            dataType:"json",
-            data:{
-                'play_id':play_id,
-                'sign':'switch',  //修改信息
-               'csrfmiddlewaretoken':'{{ csrf_token }}',
-            },
-            success:function (res) {
-                $('#play').remove()
-                $('#play_div').append(' <video id="play"  controls="controls" width="870px" height="520px"><source class="play_class" src=res.play_src type="audio/ogg"></video>')
-                var class_object = $('.play_class');
-                class_object.attr('src',res.play_src)
+    $(document).ready(function () {
+        $(".switch").click(function () {
+            var play_id = $(this).data("id");
+            $.ajax({
+                url: "/class/video/switch/",
+                type: "POST",
+                dataType: "json",
+                async: false,
+                data: {
+                    'play_id': play_id,
+                    'sign': 'switch',  //修改信息
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function (res) {
+                    $('#play').remove()
+                    $('.play_div').append(' <video id="play"  controls="controls" width="870px" height="520px"><source class="play_class" src=res.play_src type="audio/ogg"></video>')
+                    var class_object = $('.play_class');
+                    class_object.attr('src', res.play_src)
 
-      },error:function () {
+                }, error: function () {
                     alert('失败了')
                 }
-        })
-      });
+            })
+        });
     });
 </script>
 </body>

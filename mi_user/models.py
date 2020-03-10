@@ -51,6 +51,10 @@ class User(AbstractBaseUser,PermissionsMixin):
     def get_short_name(self):
         return self.username
 
+# 用户的其他信息
+class UserOtherInformtion(models.Model):
+    headImg = models.ImageField(verbose_name='头像', upload_to='img/', default="img/default.jpg")
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
 # 登陆注册校验表单
 class miregister(forms.Form):
     username = forms.CharField(max_length=18, required=True)

@@ -5,18 +5,88 @@ html,body{
 				padding: 0;
 				margin: 0;
 			}
-ul,a:hover{
+ul,a,a:hover{
 	text-decoration:none;
 	list-style-type:none;
 }
+/*头部*/
 .header{
 	width:80%;
+	background-color:white;
 	margin: 30px auto;
-	margin-bottom: 0;
+	margin-bottom: 0 ;
 	background-color:white;
     overflow:auto;
+	height: 50px;
+	border-bottom: 1px solid #c9e2b3;
 }
-.header_ul{
+.header_li{
      float: left;
-    display: block;
+	margin-right: 30px;
+}
+.header_li a{
+	color: #337ab7;
+}
+.header_li a:hover{
+	color: #1b6d85;
+}
+/*内容部分*/
+.upload_div{
+	width:80%;
+	background-color:white;
+	margin: 0 auto;
+}
+.form_div{
+	display: block;
+	width: 60%;
+	margin: 10px auto;
+	position: relative;
+}
+.title{
+	display: block;
+	margin-top: 10px;
+}
+.form_input{
+	display: block;
+	width: 80%;
+	margin: 10px 0px 0px 20px;
+}
+.btn_div{
+	text-align:center;
+	margin-top: 10px;
+}
+.btn_cmmit,.btn_cancle{
+	background-color: #337ab7;
+	border: none;
+	border-radius: 3px;
+	color: white;
+	margin-left: 20px
+}
+.btn_add{
+	background-color: #398439;
+	border: none;
+	border-radius: 3px;
+	color: white;
+	margin-left: 20px
+}
+.video_upload{
+	width: 280px;
+	height: 280px;
+	background-color: #8c8c8c;
+	position: absolute;
+	top: 100px;
+	left: 240px;
+	z-index: 8;
+	display: none;
+}
+/*蒙层css*/
+.box{
+    width: 100%;
+    height: 100%;
+    background-color:#777777;
+    position:absolute;
+    top: 0px;
+    opacity: 0.5;
+     z-index:6;
+    display: none;
 }

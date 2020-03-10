@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'front_page',
     'mi_user',
     'mi_class',
-
 ]
 
 

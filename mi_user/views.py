@@ -19,7 +19,6 @@ def mi_login(request):
             if user:
                 if user.is_active:
                     login(request, user)
-                    # return render(request,'index.html')
                     index_url = reverse('front_page:front_index')
                     return redirect(index_url)
             else:
@@ -28,7 +27,6 @@ def mi_login(request):
           return HttpResponse('验证失败')
     else:
         return render(request, 'mi_login.html')
-
 
 #注册视图
 def mi_register(request):
@@ -45,6 +43,8 @@ def mi_register(request):
                return HttpResponse('两次密码不同')
             else:
                 user = User.objects.create_user(telephone=telephone, username=username, password=password1)
+                userInformation = UserOtherInformtion(user=user)
+                userInformation.save()
                 return render(request, 'mi_login.html',{'data':'已注册成功，请登陆。'})
         else:
             return HttpResponse('error')

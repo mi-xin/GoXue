@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect,reverse
 from django.http import HttpResponse,JsonResponse
+import json
 from . models import *
 from mi_user.models import *
 from django.core.paginator import Paginator , PageNotAnInteger,EmptyPage
@@ -8,58 +9,89 @@ import os
 # 用户上传课程视图
 def user_class_upload(request):
     if request.method == 'GET':
-        # class_id = request.GET.get('class_id')
-        # lesson = mi_class.objects.get(id=class_id)
         return render(request, 'user_class_upload.html')
-        # return HttpResponse('get')
     if request.method == 'POST':
         class_id = request.POST.get('class_id')
         if class_id is not None:
             class_boject = mi_class.objects.get(id=class_id)
+            chapter_name = request.POST.get('chapter_name')
+            # 创建章节对象
+            chapter_object = class_chapter(name=chapter_name, class_model=class_boject)
+            chapter_object.save()
             file = request.FILES.getlist('addfile')
         else:
-            # 获取当前登陆的用户id
-            create_user = request.user.uid
-            # 获取当前用户对象
-            user = User.objects.get(uid=create_user)
-            # 前端获取数据
-            file = request.FILES.getlist('myfile')
-            title = request.POST.get('title')
-            author = request.POST.get('author')
-            introduce = request.POST.get('introduce')
-            imgfile = request.FILES.getlist('img')[0]
-            print(imgfile)
-            url = []
-            name = []
-            # 创建课程对象
-            class_boject = mi_class(title=title, author=author, introduce=introduce, create_user=user,
-                                    class_image=imgfile)
-            class_boject.save()
+            upload_form = Upload_class(request.POST)
+            if upload_form.is_valid():
+                # 获取当前登陆的用户id
+                create_user = request.user.uid
+                # 获取当前用户对象
+                user = User.objects.get(uid=create_user)
+                # 前端获取数据
+                file = request.FILES.getlist('myfile')
+                title = request.POST.get('title')
+                author = request.POST.get('author')
+                introduce = request.POST.get('introduce')
+                chapter_name = request.POST.get('chapter_name')
+                if request.FILES.getlist('img'):
+                    imgfile = request.FILES.getlist('img')[0]
+                    class_boject = mi_class(title=title, author=author, introduce=introduce, create_user=user,
+                                            class_image=imgfile)
+                    class_boject.save()
+                else:
+                    # 创建课程对象
+                    class_boject = mi_class(title=title, author=author, introduce=introduce, create_user=user)
+                    class_boject.save()
+                    if chapter_name:
+                        # 创建章节对象
+                        chapter_object = class_chapter(name=chapter_name,class_model=class_boject)
+                        chapter_object.save()
+                    else:
+                        lesson = mi_class.objects.get(id=class_boject.id)
+                        return render(request, 'class_admin.html', {'lesson': lesson})
+            else:
+                # response = {"code": 1, "errors":'不知道为什么错',}
+                # return HttpResponse(json.dumps(response,ensure_ascii=False),content_type="application/json,charset=utf-8")
+                return render(request, "user_class_upload.html", {"code": 1, "errors": upload_form.errors})
         # 遍历上传的文件，并保存
         for i in file:
-            a = i.name
-            i = mi_voide(file_name=a, file=i, class_name=class_boject)
-            i.save()
-            # url.append(i)
-            # name.append(a)
+            name = i.name
+            voide = mi_voide(file_name=name, file=i, chapter_name=chapter_object)
+            voide.save()
+        # 课程对象
         lesson = mi_class.objects.get(id=class_boject.id)
-        # return render(request, 'user_class_upload.html',{'url':url,'name':name, 'b':b})
-        # return HttpResponse('success')
-        return render(request, 'class_admin.html', {'lesson': lesson})
-
+        # 章节对象
+        chapter_lists = []
+        chapter_objects = class_chapter.objects.filter(class_model=lesson)
+        for i in chapter_objects:
+            video_objects = i.class_chapter.all()
+            chapter_lists.append({
+                'chapter_object': i,
+                'video_objects': video_objects,
+            })
+        return redirect(reverse('mi_class:user_class_upload_id', args=(lesson.id,)),{'lesson': lesson,'chapter_lists':chapter_lists})
+        # return render(request, 'class_admin.html', {'lesson': lesson,'chapter_lists':chapter_lists})
 
 # 返回课程相关的
 def user_class_upload_id(request, class_id):
     if request.method == 'GET':
+        # 课程对象
         class_id = class_id
         lesson = mi_class.objects.get(id=class_id)
-        return render(request, 'class_admin.html', {'lesson': lesson})
+        # 章节对象
+        chapter_lists = []
+        chapter_objects = class_chapter.objects.filter(class_model=lesson)
+        for i in chapter_objects:
+            video_objects = i.class_chapter.all()
+            chapter_lists.append({
+                'chapter_object':i,
+                'video_objects':video_objects,
+            })
+        return render(request, 'class_admin.html', {'lesson': lesson,'chapter_lists':chapter_lists})
     if request.method == 'POST':
         pass
 # 课程的展示
 def user_class(request,sign):
     if request.method == 'GET':
-        print(sign)
         user_now = request.user.uid
         user = User.objects.get(uid=user_now)
         global user_class
@@ -81,7 +113,7 @@ def user_class(request,sign):
             number = paginator.page(1)
         except EmptyPage:
             number = paginator.page(paginator.num_pages)
-        return render(request, 'user_class.html', {'page':number,'paginator':paginator})
+        return render(request, 'user_class.html', {'page':number,'paginator':paginator,'sign':sign})
 # 课程视频管理的方法
 def class_admin(request):
     if request.is_ajax():
@@ -114,13 +146,52 @@ def class_admin(request):
             return response
         else:
             return HttpResponse('操作有误')
+    else:
+        # 前端获取要修改的章节名称/文件
+        name = request.POST.get('updata_chapter_name')
+        file = request.FILES.getlist('chapter_file')
+        chapter_id = request.POST.get('chapter_id')
+        # 获取章节对象
+        chapter_object = class_chapter.objects.get(id=chapter_id)
+        # 修改章节的名称
+        if name and name != chapter_object.name:
+            chapter_object.name = name
+            chapter_object.save()
+        for i in file:
+            name = i.name
+            voide = mi_voide(file_name=name, file=i, chapter_name=chapter_object)
+            voide.save()
+        lesson_id = chapter_object.class_model_id
+        # 课程对象
+        lesson = mi_class.objects.get(id=lesson_id)
+        # 章节对象
+        chapter_lists = []
+        chapter_objects = class_chapter.objects.filter(class_model=lesson)
+        for i in chapter_objects:
+            video_objects = i.class_chapter.all()
+            chapter_lists.append({
+                'chapter_object': i,
+                'video_objects': video_objects,
+            })
+        return redirect(reverse('mi_class:user_class_upload_id', args=(lesson.id,)),{'lesson': lesson, 'chapter_lists': chapter_lists})
 
 # 视频播放面的方法
 def video_play(request,class_id):
     if request.method == 'GET':
         class_id = class_id
         lesson = mi_class.objects.get(id=class_id)
-        return render(request, 'play.html', {'lesson': lesson})
+        # 章节对象
+        chapter_lists = []
+        chapter_objects = class_chapter.objects.filter(class_model=lesson)
+        print(chapter_objects)
+        for i in chapter_objects:
+            print(i)
+            video_objects = i.class_chapter.all()
+            chapter_lists.append({
+                'chapter_object': i,
+                'video_objects': video_objects,
+            })
+        return render(request, 'play.html', {'lesson': lesson,'chapter_lists': chapter_lists})
     if request.method == 'POST':
         pass
 # 切换视频播视频的方法
@@ -133,5 +204,3 @@ def switch_play(request):
         play_src = play_object.file.url
         response = JsonResponse({'play_src': play_src,})
         return response
-
-# 课程搜索方法

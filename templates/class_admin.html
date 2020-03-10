@@ -3,84 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <title>课程管理</title>
-     <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <link rel="stylesheet" href="/static/front_page/css/class_admin.css">
 </head>
 <body>
-    <div>
-    <form action={% url 'mi_class:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
+<div class="father_div">
+    <div class="header">
+        <ul class="header_ul">
+            <li class="header_li"><a href="{% url 'front_page:front_index' %}">首页</a></li>
+            <li class="header_li"><a href="{% url 'mi_user:user_information' %}">个人中心</a></li>
+        </ul>
+    </div>
+</div>
+<div class="upload_div">
+    <h2 style="text-align: center;color:#31b0d5;padding-top: 20px;margin-block-start: 0;margin-block-end:0;">课程管理</h2>
+    <form action={% url 'mi_class:user_class_upload' %} class="form_div" method="post" enctype="multipart/form-data"
+          multiple=True>
         {% csrf_token %}
-       <label >课程id</label> <input value="{{ lesson.id }}" name="class_id" id="class_id" ><br/>
-         <label>课程名</label> <input value="{{ lesson.title }}" name="class_title" id="class_title"><br/>
-        <label>课程简介</label> <textarea  name="class_introduce"  id="class_introduce">{{ lesson.introduce }}</textarea><br/>
-         <label>课程作者</label> <input value="{{ lesson.author }}" name="class_author" id="class_author"><br/>
-         <label>课程封面</label> <br/>
-        <img src="{{ MEDIA_URL }}{{ lesson.class_image }}" name="class_img" id="class_img" height=100 width=100><br/>
-        {{lesson.class_image.url }}
-          <button type="button" id='sum'>确认修改</button><br/>
-         <input type="file" name="addfile" multiple=True />
-        <button type="submit">确认添加视频</button><br/>
+        <label class="title" style="display: none">课程id</label> <input value="{{ lesson.id }}" name="class_id"
+                                                                       id="class_id" class="form_input"
+                                                                       style="display: none">
+        <label class="title">课程名</label> <input value="{{ lesson.title }}" name="class_title" id="class_title"
+                                                class="form_input">
+        <label class="title">课程简介</label> <textarea name="class_introduce" id="class_introduce" class="form_input"
+                                                    style="height: 200px">{{ lesson.introduce }}</textarea>
+        <label class="title">课程作者</label> <input value="{{ lesson.author }}" name="class_author" id="class_author"
+                                                 class="form_input">
+        <label class="title">课程封面</label>
+        <img src="{{ MEDIA_URL }}{{ lesson.class_image }}" name="class_img" id="class_img" height=100px
+             width=100px><br/>
+        <button type="button" id='sum'>确认修改</button>
+        <div class="video_upload">
+            <label class="title">章节名称</label>
+            <input class="chapter_input form_input" name="chapter_name" placeholder="请输入章节的名称"/>
+            <label class="title">上传相关文件</label>
+            <input type="file" name="addfile" multiple=True class="form_input"/>
+            <button type="submit" class="commit_add">确认上传</button>
+            <button type="button" class="cancle_add">取消上传</button>
+        </div>
+        <button type="button" class="btn_add">添加新的章节</button>
     </form>
-
-
-        <label>课程视频</label><br/>
     <table id="leasson_table">
-        <tr>
-            <th>文件名</th>
-            <th>操作</th>
-        </tr>
-         {% for i in lesson.class_name.all %}
-        <tr class={{ i.id }}>
-            <td ><spean >{{ i.file_name }}</spean></td>
-            <td ><button class="del" data-delid={{ i.id }}>删除</button></td>
-        </tr>
-         {% endfor %}
+            <div class="admin_upload">
+                    <form action="{% url 'mi_class:class_admin' %}" method="post" enctype="multipart/form-data" multiple=True>
+                        {% csrf_token %}
+                        <label class="title">章节的id</label>
+                        <input class="addid" name="chapter_id"/>
+                        <label class="title">修改章节名称</label>
+                        <input class="chapter_input form_input" name="updata_chapter_name" placeholder="请输入章节的名称"/>
+                        <label class="title">上传相关文件</label>
+                        <input type="file" name="chapter_file" multiple=True class="form_input"/>
+                        <button type="submit" class="commit_add">确认</button>
+                        <button type="button" class="cancle_add">取消</button>
+                    </form>
+            </div>
+        {% if chapter_lists %}
+            {% for i in chapter_lists %}
+                <th>第{{ forloop.counter }}章：{{ i.chapter_object.name }}
+                <td style="position: relative;">
+                    <button type="button" class="admin_chapter" data-addid={{ i.chapter_object.id }}>管理</button>
+                </td>
+                </th>
+                {% for j in i.video_objects %}
+                    <tr class={{ j.id }}>
+                        <td>
+                            <spean>{{ j.file_name }}</spean>
+                        </td>
+                        <td>
+                            <button type="button" class="del" data-delid={{ j.id }}>删除</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            暂无章节
+        {% endif %}
     </table>
-    </div>
-    </div>
+</div>
+</div>
+
+<div class="footer">软件1731-肖沵鑫的毕业设计<br/>
+    171414337
+</div>
+
+{#<div class="box">#}
+{##}
+{#</div>#}
 <script>
-    $(document).ready(function(){
-      $("#sum").click(function(){
-          var class_id = $('#class_id').val()
-          var class_title = $('#class_title').val()
-          var class_author = $('#class_author').val()
-          var class_introduce = $('#class_introduce').val()
-        $.ajax({
-            url:"/class/class/damin",
-             type:"POST",
-            dataType:"json",
-            data:{
-                'class_id':class_id,
-                'class_title':class_title,
-                'class_introduce':class_introduce,
-                'class_author':class_author,
-                'sign':'update',  //修改信息
-               'csrfmiddlewaretoken':'{{ csrf_token }}',
-            },
-            success:function (res) {
-                alert('修改成功')
-      }
-        })
-      });
-        $('.del').on('click',function () {
+    $(document).ready(function () {
+        $("#sum").click(function () {
+            var class_id = $('#class_id').val()
+            var class_title = $('#class_title').val()
+            var class_author = $('#class_author').val()
+            var class_introduce = $('#class_introduce').val()
+            $.ajax({
+                url: "/class/class/damin",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'class_id': class_id,
+                    'class_title': class_title,
+                    'class_introduce': class_introduce,
+                    'class_author': class_author,
+                    'sign': 'update',  //修改信息
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function (res) {
+                    alert('修改成功')
+                },
+            })
+        });
+        $('.del').on('click', function () {
             var del_id = $(".del").data("delid");
             var class_id = $('#class_id').val();
             $.ajax({
-            url:"/class/class/damin",
-            type:"POST",
-            dataType:"json",
-            data:{
-                'sign':'del',  //删除视频标志
-                'del_id':del_id, //删除视频id
-                'class_id':class_id, //课程的id
-               'csrfmiddlewaretoken':'{{ csrf_token }}',
-            },
-            success:function (res) {
-                {#alert(res.class_object.title)#}
-                $('.'+del_id).remove()
-            },error:function () {
+                url: "/class/class/damin",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'sign': 'del',  //删除视频标志
+                    'del_id': del_id, //删除视频id
+                    'class_id': class_id, //课程的id
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function (res) {
+                    {#alert(res.class_object.title)#}
+                    $('.' + del_id).remove()
+                }, error: function (res) {
                     alert('失败了')
                 }
             })
+        });
+        $('.btn_add').on('click', function () {
+            $('.btn_add').on('click', function () {
+                {#$('.box').css('display', 'block');#}
+                $('.video_upload').css('display', 'block');
+            });
+            $('.cancle_add').on('click', function () {
+                {#$('.box').css('display', 'none');#}
+                $('.video_upload').css('display', 'none');
+            });
+        });
+        $('.admin_chapter').on('click', function () {
+            var addid = $(this).data("addid");
+            $(".addid").attr("value",addid);
+            alert($(".addid").val())
+            $('.admin_upload').css('display', 'block');
 
         })
     });

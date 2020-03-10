@@ -1,39 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="UTF-8">
     <title>我的课程</title>
-    <script type="text/javascript" scr="{% static 'js/jQuery.js' %}"></script>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
     <link rel="stylesheet" href="/static/front_page/css/upload_class.css">
 </head>
 <body>
 <div class="father_div">
     <div class="header">
         <ul class="header_ul">
-            <li><a>首页</a></li>
-            <li><a>个人中心</a></li>
+            <li class="header_li"><a href="{% url 'front_page:front_index' %}">首页</a></li>
+            <li class="header_li"><a href="{% url 'mi_user:user_information' %}">个人中心</a></li>
         </ul>
     </div>
 </div>
 <div class="upload_div">
-    <form  action={% url 'mi_class:user_class_upload'  %} method="post" enctype="multipart/form-data" multiple=True>
+    <h2 style="text-align: center;color:#31b0d5;padding-top: 20px;margin-block-start: 0;margin-block-end:0;">开设你的新课程吧</h2>
+
+    <form class="form_div"  method="post" enctype="multipart/form-data" multiple=True>
     {% csrf_token %}
-    <input type="text" name="title" placeholder="请输入课程名字"/>
-    <br/>
-    <input type="text" name="author" placeholder="请输入作者"/>
-    <br/>
-      <textarea cols="20" rows="20" name="introduce" placeholder="请描述下课程简介"></textarea>
-    <br/>
-    <h5>上传课程视频</h5>
-    <input type="file" name="myfile" multiple=True placeholder="上传视频"/>
-    <h5>上传课程封面</h5>
-    <input name="img" type="file" placeholder="上传封面">
-    <br/>
-    <input type="submit" id="btn">
+     <laber class="title">课程名</laber>{% if code == 1 %}<span style="color: red">{{ errors.title}}</span>{% endif %}
+    <input type="text" name="title" placeholder="请输入课程名字" id="title" class="form_input" />
+      <laber class="title">作者</laber>
+    <input type="text" name="author" placeholder="请输入作者" class="form_input"/>
+          <laber class="title">课程简介</laber>{% if code == 1 %}<span style="color: red">{{ errors.introduce}}</span>{% endif %}
+      <textarea cols="20" rows="20" name="introduce" placeholder="请描述下课程简介" class="form_input"></textarea>
+    <label class="title">上传课程封面</label>
+    <input name="img" type="file" placeholder="上传封面" class="form_input">
+    <label class="title">章节</label>
+        <button type='button' class="btn_add">添加章节</button>
+    <div class="video_upload">
+        <label class="title">章节名称</label>
+        <input class="chapter_input form_input" name="chapter_name" placeholder="请输入章节的名称" />
+        <label class="title">上传相关文件</label>
+        <input type="file" name="myfile" multiple=True placeholder="上传视频" class="form_input"/>
+        <button type="submit" class="commit_add">确认上传</button>
+        <button type="button" class="cancle_add">取消上传</button>
+    </div>
+    <div class="btn_div">
+        <button type="submit"  class="btn_cmmit">确认上传</button>
+        <button type="reset"  class="btn_cancle">取消上传</button>
+    </div>
+    <div class="footer">软件1731-肖沵鑫的毕业设计<br/>
+
+    </div>
 </form>
 </div>
+<div class="box">
 
+</div>
+<script>
+    $(document).ready(function(){
+        $('.btn_add').on('click',function(){
+            var  title = $('input[name="title"]').val()
+            var  introduce = $('textarea[name="introduce"]').val()
+            if(!title ||!introduce){
+                alert('请先填写课程名和课程简介哈！')
+            }else {
+                $('.btn_add').on('click',function(){
+                $('.box').css('display', 'block');
+                $('.video_upload').css('display', 'block');
+                });
+                 $('.cancle_add').on('click',function(){
+                $('.box').css('display', 'none');
+                $('.video_upload').css('display', 'none');
+                });
+            }
+        });
+    })
+</script>
 </body>
-
 </html>
