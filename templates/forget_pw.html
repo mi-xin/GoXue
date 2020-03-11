@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Go学-重置密码</title>
+      <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <link rel="stylesheet" href="/static/front_page/css/form.css">
+</head>
+<body>
+    <div class="form_pw_div">
+    <form action="{% url 'mi_user:resetpw' %}" method="post" class="form_pw">
+        {% csrf_token %}
+        {% if code == 0 %}
+            <span style="display: block;text-align: center;color: red">{{ error }}</span>
+        {% endif %}
+        <label class="pw_label">邮箱</label>
+       <input type="text" name="email" class="pw_input" placeholder="请输入绑定邮箱" />
+        <button type="submit" class="login_btn">确认修改</button>
+        <a class="remember_pw">记得密码</a>
+    </form>
+</div>
+</body>
+</html>

@@ -6,25 +6,25 @@ from mi_class.models import *
 import os
 # 重写 UserMangager
 class UserManager(BaseUserManager):
-    def _create_user(self, telephone, username, password, **kwargs):
+    def _create_user(self, telephone, username, password, email, **kwargs):
         if not telephone:
             raise ValueError("请填入手机号码！")
         if not username:
             raise ValueError("请输入用户名！")
         if not password:
             raise ValueError("请填入密码!")
-        # if not is_teacher:
-        #     raise ValueError("请选择您的身份!")
-        user = self.model(telephone=telephone,username=username,password=password,**kwargs)
+        if not email:
+            raise ValueError("请填入邮箱!")
+        user = self.model(telephone=telephone,username=username,password=password,email=email,**kwargs)
         user.set_password(password)
         user.save()
         return user
-    def create_user(self, telephone, username, password,**kwargs):
+    def create_user(self, telephone, username, password,email,**kwargs):
         kwargs['is_superuser'] = False
-        return self._create_user(telephone, username, password, **kwargs)
-    def create_superuser(self, telephone, username, password, **kwargs):
+        return self._create_user(telephone, username, password, email, **kwargs)
+    def create_superuser(self, telephone, username, password,email, **kwargs):
         kwargs['is_superuser'] = True
-        return self._create_user(telephone, username, password, **kwargs)
+        return self._create_user(telephone, username, password, email, **kwargs)
 # 重写User
 class User(AbstractBaseUser,PermissionsMixin):
     uid = ShortUUIDField(primary_key=True)
@@ -57,15 +57,18 @@ class UserOtherInformtion(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
 # 登陆注册校验表单
 class miregister(forms.Form):
-    username = forms.CharField(max_length=18, required=True)
+    username = forms.CharField(max_length=8, required=True)
     password1 = forms.CharField(max_length=30, required=True)
     password2 = forms.CharField(max_length=30, required=True)
     telephone = forms.CharField(max_length=11, required=True)
+    email = forms.EmailField(required=True)
 class milogin(forms.Form):
     password = forms.CharField(max_length=30, required=True)
     telephone = forms.CharField(max_length=11, required=True)
-
 # 修改密码校验
 class udpassword(forms.Form):
     old_password = forms.CharField(max_length=30, required=True)
     new_password = forms.CharField(max_length=30, required=True)
+# 重置密码邮箱校验
+class forgetpw(forms.Form):
+    email = forms.EmailField(required=True)

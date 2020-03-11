@@ -31,7 +31,9 @@ ul,a:hover{
 	line-height: 50px;
 }
 .header_span{
+	display: inline-block;
 	margin-left: 28px;
+	line-height: 50px;
 }
 /*搜索框*/
 .search_div{
@@ -65,6 +67,9 @@ ul,a:hover{
 	float: none;
 	/*align-items: center;*/
 	display: none;
+}
+.user_information:hover .infomation_slect{
+	display: block;
 }
 .infomation_slect,ul{
 	padding-inline-start: 0px;

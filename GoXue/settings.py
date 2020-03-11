@@ -149,3 +149,20 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,"static"),
  ]
+
+# 邮箱发送的相关配置
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# SMTP服务器主机
+EMAIL_HOST='smtp.qq.com'
+#SMTP服务器端口
+EMAIL_PORT=465
+#SMTP服务器的账号
+EMAIL_HOST_USER='740085748@qq.com'
+# SMTP服务器授权码
+EMAIL_HOST_PASSWORD='kcazdhnkfkbkbefa'
+#收件人看到的发件人
+EMAIL_FROM = 'Go学<740085748@qq.com>'
+#是否使用隐式TLS安全连接
+EMAIL_USE_SSL=True
+# 备注
+# EMAIL_USE_SSL 和 EMAIL_USE_TLS 是互斥的，即只能有一个为 True。

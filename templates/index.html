@@ -16,15 +16,15 @@
                     <span class="header_span"><a href="{% url  'mi_class:user_class' sign='all' %}">我的课程</a></span>
                     <span class="header_span user_information">
                         <img style="width: 40px;height: 40px;border-radius: 50%" src={{ request.user.userotherinformtion.headImg.url  }}>
-                        <a  href="{% url 'mi_user:user_information' %}">{{ request.user.username }}</a>
+                        <a  href="{% url 'mi_user:user_information' %}" >{{ request.user.username }}</a>
                         <ul class="infomation_slect">
-                            <li><a>个人中心</a></li>
+                            <li><a  href="{% url 'mi_user:user_information' %}">个人中心</a></li>
                             <li><a href="{% url 'mi_user:logout' %}">退出登陆</a></li>
                         </ul>
                     </span>
                 {% else %}
-                    <span><a href="{% url 'mi_user:login' %}">登陆</a></span>
-                    <span><a href="{% url 'mi_user:register' %}">注册</a></span>
+                    <span style="display: inline-block;margin-left: 10px"><a href="{% url 'mi_user:login' %}">登陆</a></span>
+                    <span style="display: inline-block;margin-left: 10px"><a href="{% url 'mi_user:register' %}">注册</a></span>
                 {% endif %}
     </span>
     <div class="search_div">
@@ -91,15 +91,5 @@
     171414337
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('.user_information').hover(function () {
-             $(this).children("ul").show()
-        });
-        $('.infomation_slect').mouseout(function () {
-             $('.infomation_slect').hide()
-        });
-    })
-</script>
 </body>
 </html>

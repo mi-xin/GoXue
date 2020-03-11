@@ -183,9 +183,7 @@ def video_play(request,class_id):
         # 章节对象
         chapter_lists = []
         chapter_objects = class_chapter.objects.filter(class_model=lesson)
-        print(chapter_objects)
         for i in chapter_objects:
-            print(i)
             video_objects = i.class_chapter.all()
             chapter_lists.append({
                 'chapter_object': i,
@@ -198,9 +196,7 @@ def video_play(request,class_id):
 def switch_play(request):
     if request.method == 'POST':
         play_id = request.POST.get('play_id')
-        print(play_id)
         play_object = mi_voide.objects.get(id=play_id)
-        print(play_object)
         play_src = play_object.file.url
         response = JsonResponse({'play_src': play_src,})
         return response

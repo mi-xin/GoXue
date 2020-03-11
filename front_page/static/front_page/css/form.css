@@ -1,0 +1,53 @@
+html,body{
+				background: #e5e5e5;
+				width: 100%;
+				height: 100%;
+				padding: 0;
+				margin: 0;
+			}
+ul,a,a:hover{
+	text-decoration:none;
+	list-style-type:none;
+}
+.form_login_div,.form_register_div,.form_pw_div{
+    width: 28%;
+    margin: 0 auto;
+    background-color: white;
+    position: relative;
+    margin-top: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 10px;
+}
+.form_login,.form_register,.form_pw{
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+}
+.login_input,.register_input,.pw_input{
+    display: block;
+    width: 100%;
+    height: 20px;
+    border: 1px solid #269abc;
+}
+.login_label,.register_label,.pw_label{
+    display: block;
+    margin: 8px 0px;
+}
+.login_btn{
+    display: block;
+    margin: 0px auto;
+    margin-top: 28px;
+    border: none;
+    background-color: #269abc;
+    border-radius: 3px;
+    height: 30px;
+    width: 100px;
+    color: white;
+}
+.forget_pw,.remember_pw{
+    color: #31b0d5;
+    position: absolute;
+    bottom: 26px;
+    right: 40px;
+}
