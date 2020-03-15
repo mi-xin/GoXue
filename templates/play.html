@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>课程详情页面</title>
-    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    {#    <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>#}
     <link rel="stylesheet" href="/static/front_page/css/play.css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="header">
+<div class="heade_play">
     <ul class="header_ul">
         <li class="header_li"><a href="{% url 'front_page:front_index' %}">首页</a></li>
         <li class="header_li"><a href="{% url 'mi_user:user_information' %}">个人中心</a></li>
@@ -16,7 +19,8 @@
 <div id="play_div">
     <div class="play_div">
         <video id="play" controls="controls" width="980px" height="520px">
-            <source class="play_class" src="{{ MEDIA_URL }}{{ chapter_lists.0.video_objects.first.file }}" type="audio/ogg">
+            <source class="play_class" src="{{ MEDIA_URL }}{{ chapter_lists.0.video_objects.first.file }}"
+                    type="audio/ogg">
         </video>
     </div>
     <div class="details">
@@ -24,29 +28,105 @@
         <span class="heading">{{ lesson.author }}</span>
         <h4 class="heading" style="color: black; margin-block-start: 0.3em;">课程简介</h4>
         <span class="heading" style="margin-left: 20px">{{ lesson.introduce }}</span>
-
     </div>
-    <table class="leasson_table">
-        {% if chapter_lists %}
-            {% for i in chapter_lists %}
-                <th style="float: left">第{{ forloop.counter }}章：{{ i.chapter_object.name }}</th>
-                {% for j in i.video_objects %}
-                    <tr class={{ j.id }} >
-                        <td>
-                            <button class="switch" data-id="{{ j.id }}" type="button">{{ j.file_name }}</button>
-                        </td>
-                    </tr>
+    <ul class="nav nav-tabs">
+        <li><a href="#catalog" data-toggle="tab">目录</a></li>
+        <li class="active"><a href="#comment" data-toggle="tab">评论</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane " id="catalog">
+            <table class="leasson_table">
+                {% if chapter_lists %}
+                    {% for i in chapter_lists %}
+                        <th style="float: left">第{{ forloop.counter }}章：{{ i.chapter_object.name }}</th>
+                        {% for j in i.video_objects %}
+                            <tr class={{ j.id }}>
+                                <td>
+                                    <button class="switch" data-id="{{ j.id }}" type="button">{{ j.file_name }}</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    作者比较懒，没有上传视频哦！
+                {% endif %}
+            </table>
+        </div>
+        <div class="tab-pane active" id="comment">
+            <form action="{% url 'mi_class:class_comment' %}" method="post" class="comment_form">
+                <textarea rows="5" name="comment" placeholder="写下你的想法" class="commtent_context"></textarea>
+                <button type="button" class="comment_button" data-id={{ lesson.id }}>确认评论</button>
+            </form>
+            <div class="comment_content">
+                {% for i in page.object_list %}
+                    <li class="class_item">
+                        <div class="userImg" ><img style="width: 68px;height: 68px;border-radius: 50%" src={{ i.user.userotherinformtion.headImg.url }} /></div>
+                        <div class="userInfon">
+                                <span style="color: #31b0d5">{{ i.user.username }}</span>
+                                <span>{{ i.content }}</span>
+                                <span style="color: #bbb;margin-top: 10px">{{ i.data }}</span>
+                                <button type="button" class="reply_btn" data-id={{ i.id }}>回复评论</button>
+                        </div>
+                    </li>
                 {% endfor %}
-            {% endfor %}
-        {% else %}
-            作者比较懒，没有上传视频哦！
-        {% endif %}
-    </table>
+                <div class="page_div">
+                    <ul class="pagination">
+                        {# 如果当前页还有上一页 #}
+                        {% if page.has_previous %}
+                            <li>
+                                {# 点击a标签，跳转到上一页链接 ?index  为地址后面拼接的参数 #}
+                                <a href="?index={{ page.previous_page_number }}">上一页</a>
+                            </li>
+                        {% else %}
+                            {# 如果没有上一页， 则上一页按钮不可点击 #}
+                            <li class="disabled">
+                                <a href="#">上一页</a>
+                            </li>
+                        {% endif %}
+
+                        {% for page_number in paginator.page_range %}
+                            {# 获取当前页的页码 #}
+                            {% if page_number == page.number %}
+                                {# 如果是当前页的话，选中 #}
+                                <li class="active">
+                                    <a href="?index={{ page_number }}">{{ page_number }}</a>
+                                </li>
+                            {% elif page_number == 1 %}
+                                <li>
+                                    <a href="?index={{ page_number }}">{{ page_number }} </a>
+                                </li>
+                            {% elif page_number == page.number|add:3  or page_number == page.number|add:-3 %}
+                                <li>
+                                    <a href="#">...</a>
+                                </li>
+                            {% elif page_number <= page.number|add:2  and page_number >= page.number|add:-2 %}
+                                <li>
+                                    <a href="?index={{ page_number }}">{{ page_number }}</a>
+                                </li>
+                            {% elif page_number == paginator.num_pages %}
+                                <li>
+                                    <a href="?index={{ page_number }}">{{ page_number }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page.has_next %}
+                            <li>
+                                <a href="?index={{ page.next_page_number }}">下一页</a>
+                            </li>
+                        {% else %}
+                            <li class="disabled">
+                                <a href="#">下一页</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="footer">软件1731-肖沵鑫的毕业设计<br/>
     171414337
 </div>
-
 <script>
     $(document).ready(function () {
         $(".switch").click(function () {
@@ -71,8 +151,31 @@
                 }
             })
         });
+        $(".comment_button").on('click', function () {
+            var lesson_id = $(this).data("id");
+            var comment = $("textarea[name='comment']").val()
+            $.ajax({
+                url: '/class/lesson/comment/',
+                type: "POST",
+                dataType: "json",
+                async: false,
+                data: {
+                    'lesson_id': lesson_id,
+                    'comment': comment,
+                    'sign': 'comment',
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                }, success: function (res) {
+                    alert(res.comment)
+                    $('.comment_list').prepend('<li>' + res.comment + '</li> ')
+                }, error: function (res) {
+                    alert(res)
+                    alert('失败了')
+                }
+            })
+        });
     });
 </script>
+
 </body>
 
 </html>

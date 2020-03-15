@@ -29,32 +29,48 @@
                                                     style="height: 200px">{{ lesson.introduce }}</textarea>
         <label class="title">课程作者</label> <input value="{{ lesson.author }}" name="class_author" id="class_author"
                                                  class="form_input">
-        <label class="title">课程封面</label>
-        <img src="{{ MEDIA_URL }}{{ lesson.class_image }}" name="class_img" id="class_img" height=100px
-             width=100px><br/>
         <button type="button" id='sum'>确认修改</button>
-        <div class="video_upload">
-            <label class="title">章节名称</label>
-            <input class="chapter_input form_input" name="chapter_name" placeholder="请输入章节的名称"/>
-            <label class="title">上传相关文件</label>
-            <input type="file" name="addfile" multiple=True class="form_input"/>
-            <button type="submit" class="commit_add">确认上传</button>
-            <button type="button" class="cancle_add">取消上传</button>
-        </div>
+        <label class="title">课程封面</label>
+        <img src="{{ MEDIA_URL }}{{ lesson.class_image }}" name="class_img" id="class_img" style="height:100px;width:100px;margin-left: 70px"><br/>
+        <button class="img_btn" type="button" data-id={{ lesson.id }} >上传新的封面</button>
         <button type="button" class="btn_add">添加新的章节</button>
+{#        添加新章节#}
+        <div class="video_upload">
+            <label class="upload_title">章节名称</label>
+            <input class="chapter_input form_input" name="chapter_name" placeholder="请输入章节的名称"/>
+            <label class="upload_title">上传相关文件</label>
+            <input type="file" name="addfile" multiple=True class="form_input"/>
+            <div class="btn_admin">
+                <button type="submit" class="commit_add">确认上传</button>
+                <button type="button" class="cancle_add">取消上传</button>
+            </div>
+        </div>
+    </form>
+{#    修改图片#}
+    <form class="uptateImg" method="post" action="{% url 'mi_user:imgupdate' %} " enctype="multipart/form-data">
+{#        {% csrf_token %}#}
+        <label class="title_img">上传新的封面</label>
+        <input style="display: none" name="lesson_id" value={{ lesson.id }} class="title_img"/>
+        <input type="file" name="imgflie" class="title_img"/>
+        <div class="img_btn_div">
+            <button type="button" class="img_commit" data-id={{ lesson.id }}>确认上传</button>
+            <button type="reset" class="imgreset">取消上传</button>
+        </div>
     </form>
     <table id="leasson_table">
             <div class="admin_upload">
                     <form action="{% url 'mi_class:class_admin' %}" method="post" enctype="multipart/form-data" multiple=True>
                         {% csrf_token %}
-                        <label class="title">章节的id</label>
-                        <input class="addid" name="chapter_id"/>
-                        <label class="title">修改章节名称</label>
+                        <label class="upload_title" style="display: none">章节的id</label>
+                        <input class="addid" name="chapter_id" style="display: none"/>
+                        <label class="upload_title">修改章节名称</label>
                         <input class="chapter_input form_input" name="updata_chapter_name" placeholder="请输入章节的名称"/>
-                        <label class="title">上传相关文件</label>
+                        <label class="upload_title">上传相关文件</label>
                         <input type="file" name="chapter_file" multiple=True class="form_input"/>
-                        <button type="submit" class="commit_add">确认</button>
-                        <button type="button" class="cancle_add">取消</button>
+                        <div class="btn_admin">
+                            <button type="submit" class="commit_add">确认</button>
+                            <button type="button" class="cancle_add">取消</button>
+                        </div>
                     </form>
             </div>
         {% if chapter_lists %}
@@ -62,6 +78,7 @@
                 <th>第{{ forloop.counter }}章：{{ i.chapter_object.name }}
                 <td style="position: relative;">
                     <button type="button" class="admin_chapter" data-addid={{ i.chapter_object.id }}>管理</button>
+                    <button type="button" class="del_chapter" data-delid={{ i.chapter_object.id }}>删除本章节</button>
                 </td>
                 </th>
                 {% for j in i.video_objects %}
@@ -97,7 +114,7 @@
             var class_author = $('#class_author').val()
             var class_introduce = $('#class_introduce').val()
             $.ajax({
-                url: "/class/class/damin",
+                url: "/class/class/damin/",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -110,14 +127,38 @@
                 },
                 success: function (res) {
                     alert('修改成功')
-                },
+                },error: function (res) {
+                    alert('失败了')
+                }
             })
         });
+        $('.del_chapter').on('click', function () {
+            var del_id = $(this).data("delid");
+            $.ajax({
+                url: "/class/class/damin/",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    'sign': 'del_chapter',  //删除视频标志
+                    'del_id': del_id, //删除章节id
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function (res) {
+                    if(res.code==1){
+                        alert('删除成功')
+                        window.location.reload()
+                    }
+                }, error: function (res) {
+                    alert('失败了')
+                }
+            })
+        });
+
         $('.del').on('click', function () {
             var del_id = $(".del").data("delid");
             var class_id = $('#class_id').val();
             $.ajax({
-                url: "/class/class/damin",
+                url: "/class/class/damin/",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -127,16 +168,17 @@
                     'csrfmiddlewaretoken': '{{ csrf_token }}',
                 },
                 success: function (res) {
-                    {#alert(res.class_object.title)#}
-                    $('.' + del_id).remove()
+                   if (res.code==1){
+                     $('.' + del_id).remove()
+                   }
                 }, error: function (res) {
                     alert('失败了')
                 }
             })
         });
+
         $('.btn_add').on('click', function () {
             $('.btn_add').on('click', function () {
-                {#$('.box').css('display', 'block');#}
                 $('.video_upload').css('display', 'block');
             });
             $('.cancle_add').on('click', function () {
@@ -150,8 +192,43 @@
             alert($(".addid").val())
             $('.admin_upload').css('display', 'block');
 
-        })
-    });
+        });
+
+        $('.img_btn').on('click', function () {
+               $('.uptateImg').css('display','block')
+        });
+         $('.imgreset').on('click', function () {
+               $('.uptateImg').css('display','none')
+        });
+          $('.img_commit').on('click', function () {
+            var formData= new FormData();
+            var img = $("input[name='imgflie']").val()
+            if(img == ''){
+                alert('请上传文件')
+                return false;
+            };
+            var id = $(this).data("id");
+            var class_id = $("input[name='lesson_id']").val();
+            formData.append("id",id);
+            formData.append("sign",'lesson_img');
+            formData.append("class_id",class_id);
+            formData.append("csrfmiddlewaretoken",'{{ csrf_token }}');
+            formData.append('img',$("input[name='imgflie']")[0].files[0]);
+            $.ajax({
+                type : "post",
+                url : "/user/imgUpdate/",
+                data : formData,
+                processData : false,
+                contentType : false,
+                success : function(res){
+                    if(res.code ==1){
+                        alert("封面修改成功!");
+                    window.location.reload()
+                    }
+                }
+            });
+        });
+   });
 </script>
 </body>
 </html>

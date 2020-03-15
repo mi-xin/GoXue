@@ -25,12 +25,14 @@ ul,a,a:hover{
 	float: left;
 	margin-left: 28px;
 	line-height: 50px;
+	overflow:auto;
 }
 .header_right{
 	float: right;
 	margin-right: 28px;
 	line-height: 50px;
 	position:relative;
+	overflow:auto;
 }
 .header_span{
 	margin-left: 28px;
@@ -46,14 +48,15 @@ ul,a,a:hover{
 .content-left{
 	float: left;
 	overflow: auto;
-	width: 200px;
+	width: 18%;
 	background-color: white;
 	/*border:1px solid #5bc0de;*/
 }
 
 .content-right{
-	float: left;
+	float: right;
 	overflow: auto;
+	width: 82%;
 	/*margin-left: 50px;*/
 }
 .left_ul{
@@ -66,10 +69,20 @@ ul,a,a:hover{
 .left_li:hover{
 	background-color:#5bc0de;
 }
-.right_li{
-	/*display:flex;*/
-	/*flex-direction:row-reverse*/
+.right_ul{
+	display: block;
+	margin-bottom: 20px;
 }
 .li_border{
 	border-bottom: #5bc0de solid 2px;
+}
+.btn_div{
+	margin-top: 10px;
+}
+/*分页css*/
+.page_div{
+	width: 80%;
+	background-color: white;
+	margin: 0px auto;
+	text-align: center;
 }

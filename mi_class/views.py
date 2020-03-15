@@ -3,9 +3,14 @@ from django.http import HttpResponse,JsonResponse
 import json
 from . models import *
 from mi_user.models import *
+from django import forms
 from django.core.paginator import Paginator , PageNotAnInteger,EmptyPage
 # Create your views here.
 import os
+# 课程创建校验
+class Upload_class(forms.Form):
+    title = forms.CharField(label="课程名", error_messages={"required": "课程名必填"},)
+    introduce = forms.CharField(label="简介", error_messages={"required": "简介必填"})
 # 用户上传课程视图
 def user_class_upload(request):
     if request.method == 'GET':
@@ -93,16 +98,16 @@ def user_class_upload_id(request, class_id):
 def user_class(request,sign):
     if request.method == 'GET':
         user_now = request.user.uid
-        user = User.objects.get(uid=user_now)
+        user = User.objects.get(uid=user_now,is_active=1)
         global user_class
         allclass = []
         if sign == 'all':
-            user_class = user.create_user.all()
+            user_class = user.create_user.filter(is_active=1)
         if sign =='yes':
-            user_class = user.create_user.filter(is_release=1)
+            user_class = user.create_user.filter(is_release=1,is_active=1)
         if sign =='no':
-            user_class = user.create_user.filter(is_release=0)
-        paginator = Paginator(user_class, 1, 0)
+            user_class = user.create_user.filter(is_release=0,is_active=1)
+        paginator = Paginator(user_class, 2, 0)
         try:
             # 获取index的值，如果没有，则设置使用默认值1
             num = request.GET.get('index', '1')
@@ -114,7 +119,30 @@ def user_class(request,sign):
         except EmptyPage:
             number = paginator.page(paginator.num_pages)
         return render(request, 'user_class.html', {'page':number,'paginator':paginator,'sign':sign})
-# 课程视频管理的方法
+    else:
+        return HttpResponse('出现问题了')
+# 课程的删除与发布的管理
+def lesson_admin(request):
+    if request.is_ajax():
+        if request.POST.get('sign') == 'del':
+            # 前端获取数据
+            id = request.POST.get('id')
+            class_object = mi_class.objects.get(id=id)
+            class_object.is_active = False
+            class_object.save()
+            return JsonResponse({'code':1})
+        elif request.POST.get('sign') == 'release':
+            # 前端获取数据
+            id = request.POST.get('id')
+            class_object = mi_class.objects.get(id=id)
+            class_object.is_release = True
+            class_object.save()
+            return JsonResponse({'code':1})
+        else:
+            return JsonResponse({'code':0})
+    else:
+        return HttpResponse('操作有误')
+# 课程视频管理(课程信息的修改/视频的增加删除/章节的删除/章节信息的修改及章节的增加)
 def class_admin(request):
     if request.is_ajax():
         if request.POST.get('sign') == 'update':
@@ -142,7 +170,14 @@ def class_admin(request):
             del_id = request.POST.get('del_id')
             #  获取课程对象
             del_object = mi_voide.objects.get(id=del_id).delete()
-            response = JsonResponse({'del_id': del_id})
+            response = JsonResponse({'code': 1})
+            return response
+        elif request.POST.get('sign') =='del_chapter':
+            chapter_id = request.POST.get('del_id')
+            chapter_object = class_chapter.objects.get(id=chapter_id)
+            chapter_object.delete()
+            print(chapter_object)
+            response = JsonResponse({'code': 1})
             return response
         else:
             return HttpResponse('操作有误')
@@ -189,7 +224,21 @@ def video_play(request,class_id):
                 'chapter_object': i,
                 'video_objects': video_objects,
             })
-        return render(request, 'play.html', {'lesson': lesson,'chapter_lists': chapter_lists})
+        # 获取该文章的评论
+        comments = lesson.lessonComment.all().order_by('-id')
+        count = comments.count()
+        paginator = Paginator(comments, 2, 0)
+        try:
+            # GET请求方式，get()获取指定Key值所对应的value值
+            # 获取index的值，如果没有，则设置使用默认值1
+            num = request.GET.get('index', '1')
+            number = paginator.page(num)
+        except PageNotAnInteger:
+            # 如果输入的页码数不是整数，那么显示第一页数据
+            number = paginator.page(1)
+        except EmptyPage:
+            number = paginator.page(paginator.num_pages)
+        return render(request, 'play.html', {'lesson': lesson,'chapter_lists': chapter_lists,'page':number,'paginator':paginator,})
     if request.method == 'POST':
         pass
 # 切换视频播视频的方法
@@ -200,3 +249,22 @@ def switch_play(request):
         play_src = play_object.file.url
         response = JsonResponse({'play_src': play_src,})
         return response
+
+# 课程评论功能
+def comment(request):
+    if request.is_ajax():
+        if request.method == 'POST':
+            comment = request.POST.get('comment')
+            lesson_id = request.POST.get('lesson_id')
+            try:
+                lesson = mi_class.objects.get(id = lesson_id)
+            except:
+                return HttpResponse('没有课程对象')
+            user = request.user
+            user_name = user.username
+            comment_object = Comment(lesson=lesson,user=user,content=comment)
+            comment_object.save()
+            data = comment_object.data
+            return JsonResponse({'code':1, 'comment':comment,'user_name':user_name,'data':data})
+        else:
+            return HttpResponse('失败了')

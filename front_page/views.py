@@ -5,7 +5,7 @@ from django.core.paginator import Paginator , PageNotAnInteger,EmptyPage
 # Create your views here.
 # 返回首页视图
 def mi_index(request):
-    show_class_all = mi_class.objects.all()
+    show_class_all = mi_class.objects.filter(is_active=True,is_release=True)
     paginator = Paginator(show_class_all, 1, 0)
     try:
         # GET请求方式，get()获取指定Key值所对应的value值

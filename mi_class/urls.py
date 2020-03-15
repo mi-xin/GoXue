@@ -21,8 +21,10 @@ app_name = 'mi_class'
 urlpatterns = [
     path('classUpload/', views.user_class_upload, name='user_class_upload'),
     path('classUpload/<int:class_id>/', views.user_class_upload_id, name='user_class_upload_id'),
-    path('class/damin',views.class_admin,name='class_admin'),
+    path('class/damin/',views.class_admin,name='class_admin'),
+    path('lesson/admin/',views.lesson_admin,name='lesson_admin'),
     path('class/<str:sign>/', views.user_class, name='user_class'),
     path('video/<int:class_id>/', views.video_play, name='video_play_id'),
     path('video/switch/', views.switch_play, name='video_play_switch'),
+    path('lesson/comment/', views.comment, name='class_comment'),
 ]

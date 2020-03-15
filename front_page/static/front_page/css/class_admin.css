@@ -69,6 +69,14 @@ ul,a,a:hover{
 	background-color: #337ab7;
 	color: white;
 }
+.del_chapter{
+	width: 100px;
+	height: 26px;
+	border: none;
+	border-radius: 5px;
+	background-color: #8c8c8c;
+	color: black;
+}
 
 .btn_add{
 	background-color: #398439;
@@ -78,34 +86,90 @@ ul,a,a:hover{
 	width: 120px;
 	height: 30px;
 }
-.video_upload,.admin_upload{
+.video_upload{
+	padding-top: 20px;
 	width: 280px;
-	height: 280px;
-	background-color: #8c8c8c;
+	height: 200px;
+	border-radius: 10px;
+	background-color:#31b0d5;
 	position: absolute;
-	top: 100px;
-	left: 240px;
-	z-index: 8;
-	display: none;
-}
-.video_upload,.admin_upload{
-	width: 280px;
-	height: 280px;
-	background-color: #8c8c8c;
-	position: absolute;
+	top:50%;
+	left:50%;
+	transform:translateX(-50%) translateY(-50%);
 	z-index: 8;
 	display: none;
 }
 .admin_upload{
+	padding-top: 20px;
 	width: 280px;
-	height: 280px;
-	background-color: #8c8c8c;
+	height: 200px;
+	background-color: #31b0d5;
+	border-radius: 10px;
 	z-index: 8;
 	display: none;
 	position:fixed;
 	top:50%;
 	left:50%;
 	transform:translateX(-50%) translateY(-50%);
+}
+/*封面的修改*/
+.uptateImg{
+	width: 300px;
+	background-color:#31b0d5;
+	border-radius: 10px;
+	border: 1px solid #31b0d5;
+	position:fixed;
+	top:50%;
+	left:50%;
+	transform:translateX(-50%) translateY(-50%);
+	display: none;
+	z-index: 8;
+}
+.title_img{
+	display: block;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+.img_btn_div{
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+}
+.img_commit,.imgreset{
+	border: none;
+	border-radius: 2px;
+	width: 100px;
+	height: 30px;
+	color: #269abc;
+	background-color: white;
+}
+.upload_title{
+	margin-top: 50px;
+	margin-left: 10px;
+}
+.btn_admin{
+	text-align: center;
+	margin: 20px auto;
+}
+.img_btn{
+	border: none;
+	background-color: #398439;
+	color: white;
+	width: 100px;
+	border-radius: 3px;
+	width: 100px;
+	height: 30px;
+	margin-left: 70px;
+	display: block;
+	margin-bottom: 20px;
+}
+.commit_add,.cancle_add{
+	border: none;
+	border-radius: 2px;
+	width: 100px;
+	height: 30px;
+	color: #269abc;
+	background-color: white;
 }
 #leasson_table{
 	display: block;

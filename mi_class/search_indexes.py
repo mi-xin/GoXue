@@ -8,4 +8,4 @@ class mi_classIndex(indexes.SearchIndex, indexes.Indexable):
         return mi_class
 
     def index_queryset(self, using=None):
-        return self.get_model().objects.all()
+        return self.get_model().objects.filter(is_active=True,is_release=True)

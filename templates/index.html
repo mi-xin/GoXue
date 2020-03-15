@@ -68,11 +68,24 @@
                     <li class="active">
                         <a href="?index={{ page_number }}">{{ page_number }}</a>
                     </li>
-                {% else %}
+                {% elif page_number == 1%}
+                    <li>
+                        <a href="?index={{ page_number }}">{{ page_number }} </a>
+                    </li>
+                {% elif page_number == page.number|add:3  or page_number == page.number|add:-3%}
+                    <li>
+                        <a href="#">...</a>
+                    </li>
+                {% elif page_number <= page.number|add:2  and page_number >= page.number|add:-2%}
                     <li>
                         <a href="?index={{ page_number }}">{{ page_number }}</a>
                     </li>
+                {% elif page_number == paginator.num_pages %}
+                <li>
+                    <a href="?index={{ page_number }}">{{ page_number }}</a>
+                </li>
                 {% endif %}
+
             {% endfor %}
             {% if page.has_next %}
                 <li>
