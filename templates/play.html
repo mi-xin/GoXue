@@ -38,7 +38,9 @@
             <table class="leasson_table">
                 {% if chapter_lists %}
                     {% for i in chapter_lists %}
-                        <th style="float: left">第{{ forloop.counter }}章：{{ i.chapter_object.name }}</th>
+                        <tr style="display: block;margin-top: 10px">
+                            <th style="float: left">第{{ forloop.counter }}章：{{ i.chapter_object.name }}</th>
+                        </tr>
                         {% for j in i.video_objects %}
                             <tr class={{ j.id }}>
                                 <td>

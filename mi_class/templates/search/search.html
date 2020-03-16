@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="header">
-    <span class="header_left">这是图标的位置</span>
+    <span class="header_left"><a href={% url 'front_page:front_index' %}>首页</a></span>
     <span class="header_right">
                 {% if request.user.is_authenticated %}
                     <span class="header_span"><a href="{% url  'mi_class:user_class' sign='all' %}">我的课程</a></span>

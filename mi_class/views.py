@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,reverse
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse, FileResponse
 import json
 from . models import *
 from mi_user.models import *
@@ -16,15 +16,18 @@ def user_class_upload(request):
     if request.method == 'GET':
         return render(request, 'user_class_upload.html')
     if request.method == 'POST':
+        # 文件类型类型的判断
         class_id = request.POST.get('class_id')
         if class_id is not None:
+            sign = 'old'
             class_boject = mi_class.objects.get(id=class_id)
             chapter_name = request.POST.get('chapter_name')
             # 创建章节对象
             chapter_object = class_chapter(name=chapter_name, class_model=class_boject)
             chapter_object.save()
-            file = request.FILES.getlist('addfile')
+            files = request.FILES.getlist('addfile')
         else:
+            sign = 'new'
             upload_form = Upload_class(request.POST)
             if upload_form.is_valid():
                 # 获取当前登陆的用户id
@@ -32,20 +35,26 @@ def user_class_upload(request):
                 # 获取当前用户对象
                 user = User.objects.get(uid=create_user)
                 # 前端获取数据
-                file = request.FILES.getlist('myfile')
+                files = request.FILES.getlist('myfile')
                 title = request.POST.get('title')
                 author = request.POST.get('author')
                 introduce = request.POST.get('introduce')
                 chapter_name = request.POST.get('chapter_name')
                 if request.FILES.getlist('img'):
                     imgfile = request.FILES.getlist('img')[0]
-                    class_boject = mi_class(title=title, author=author, introduce=introduce, create_user=user,
-                                            class_image=imgfile)
-                    class_boject.save()
+                    suffix = os.path.splittext(str(imgfile))[1]
+                    suffix_list=['.png','.jpg']
+                    if suffix in suffix_list:
+                        class_boject = mi_class(title=title, author=author, introduce=introduce, create_user=user,
+                                                class_image=imgfile)
+                        class_boject.save()
+                    else:
+                        return redirect(reverse('mi_class:user_class_upload_id', args=(class_id,)),)
                 else:
                     # 创建课程对象
                     class_boject = mi_class(title=title, author=author, introduce=introduce, create_user=user)
                     class_boject.save()
+                    class_id = str(class_boject.id)
                     if chapter_name:
                         # 创建章节对象
                         chapter_object = class_chapter(name=chapter_name,class_model=class_boject)
@@ -56,12 +65,21 @@ def user_class_upload(request):
             else:
                 # response = {"code": 1, "errors":'不知道为什么错',}
                 # return HttpResponse(json.dumps(response,ensure_ascii=False),content_type="application/json,charset=utf-8")
-                return render(request, "user_class_upload.html", {"code": 1, "errors": upload_form.errors})
+                return render(request, "user_class_upload.html", {"code": 0, "errors": upload_form.errors})
         # 遍历上传的文件，并保存
-        for i in file:
-            name = i.name
-            voide = mi_voide(file_name=name, file=i, chapter_name=chapter_object)
-            voide.save()
+        for i in files:
+            bool =str(i).endswith(".mp4")
+            if bool:
+                name = i.name
+                voide = mi_voide(file_name=name, file=i, chapter_name=chapter_object)
+                voide.save()
+            else:
+                chapter_object.delete()
+                context = {
+                    'code':0,
+                    'error':'文件类型错误，只支持上传mp4',
+                }
+                return redirect(reverse('mi_class:user_class_upload_id', args=(class_id,)),context)
         # 课程对象
         lesson = mi_class.objects.get(id=class_boject.id)
         # 章节对象
@@ -74,8 +92,6 @@ def user_class_upload(request):
                 'video_objects': video_objects,
             })
         return redirect(reverse('mi_class:user_class_upload_id', args=(lesson.id,)),{'lesson': lesson,'chapter_lists':chapter_lists})
-        # return render(request, 'class_admin.html', {'lesson': lesson,'chapter_lists':chapter_lists})
-
 # 返回课程相关的
 def user_class_upload_id(request, class_id):
     if request.method == 'GET':
@@ -268,3 +284,25 @@ def comment(request):
             return JsonResponse({'code':1, 'comment':comment,'user_name':user_name,'data':data})
         else:
             return HttpResponse('失败了')
+# 课程资料文件下载
+def download(request):
+    file = open('static/files/BatchPayTemplate.xls', 'rb')
+    response = FileResponse(file)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="BatchPayTemplate.xls"'
+# 课程资料的上传及删除
+def admin_data(request):
+    if request.is_ajax():
+        if request.POST.get('sign') == 'add':
+            id = request.POST.get('id')
+            lesson_boject = mi_class.objects.get(id=id)
+            try:
+                files = request.FILES.get('data')
+                print(files)
+            except:
+                pass
+            data_object = CourseMaterials(file=files, name=files.name, data=lesson_boject)
+            data_object.save()
+            return JsonResponse({'code':1})
+        else:
+            return JsonResponse({'code':0})

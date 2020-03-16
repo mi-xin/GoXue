@@ -27,4 +27,6 @@ urlpatterns = [
     path('video/<int:class_id>/', views.video_play, name='video_play_id'),
     path('video/switch/', views.switch_play, name='video_play_switch'),
     path('lesson/comment/', views.comment, name='class_comment'),
+    path('lesson/download/', views.download, name='class_download'),
+    path('lesson/dataadmin/', views.admin_data, name='data_admin'),
 ]

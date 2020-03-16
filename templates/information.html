@@ -11,6 +11,8 @@
     <h2 style="text-align: center;color:#31b0d5;padding-top: 20px">
         个人信息
     </h2>
+    <h3 class="title">头像</h3>
+    <span class="title_cont"> <img style="width: 80px;height:80px;border-radius: 50%" src={{ user.userotherinformtion.headImg.url }} /></span>
     <h3 class="title">用户名</h3>
     <span class="title_cont"> {{ user.username }}</span>
     <h3 class="title">登陆手机</h3>
@@ -26,6 +28,7 @@
     <div class="button_div">
         <button class="update">修改信息</button>
         <button class="update_word">修改密码</button>
+        <button class="update_img">修改头像</button>
     </div>
 </div>
 <div class="update_div" style="hidden:hidden">
@@ -52,9 +55,15 @@
         <button class="update_cancle" type="reset">取消修改</button>
     </form>
 </div>
-<div class="box">
-
-</div>
+<form class="uptateImg" method="post" action="{% url 'mi_user:imgupdate' %} " enctype="multipart/form-data">
+{#        {% csrf_token %}#}
+    <label class="title_img">上传新的封面</label>
+    <input type="file" name="imgflie" class="title_img"/>
+    <div class="img_btn_div">
+        <button type="button" class="img_commit" data-id={{ lesson.id }}>确认上传</button>
+        <button type="reset" class="imgreset">取消上传</button>
+    </div>
+</form>
 <script>
     $(document).ready(function () {
         $('.update').on('click', function () {
@@ -69,13 +78,45 @@
         $('.update_commit').on('click', function () {
             $('.update_div').css('display', 'none');
             $('.update_password').css('display', 'none');
-            $('.box').css('display', 'none');
         });
         $('.update_cancle').on('click', function () {
             $('.update_div').css('display', 'none');
             $('.update_password').css('display', 'none');
-            $('.box').css('display', 'none');
-        })
+        });
+        $('.update_img').on('click', function () {
+               $('.uptateImg').css('display','block')
+        });
+         $('.imgreset').on('click', function () {
+               $('.uptateImg').css('display','none')
+        });
+          $('.img_commit').on('click', function () {
+            var formData= new FormData();
+            var img = $("input[name='imgflie']").val()
+            if(img == ''){
+                alert('请上传文件')
+                return false;
+            };
+            formData.append("sign",'header_img');
+            formData.append("csrfmiddlewaretoken",'{{ csrf_token }}');
+            formData.append('img',$("input[name='imgflie']")[0].files[0]);
+            $.ajax({
+                type : "post",
+                url : "/user/imgUpdate/",
+                data : formData,
+                processData : false,
+                contentType : false,
+                success : function(res){
+                    if(res.code ==1){
+                        alert("头像修改成功!");
+                        window.location.reload()
+                    };
+                    if(res.code ==0){
+                          alert(res.error);
+                           window.location.reload()
+                    };
+                }
+            });
+        });
     })
 </script>
 </body>

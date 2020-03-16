@@ -13,6 +13,7 @@ ul,a:hover{
     width: 60%;
     background-color: white;
     margin: 50px auto;
+    padding-bottom: 5px;
     position:relative;
 }
 .title{
@@ -38,7 +39,7 @@ ul,a:hover{
     width: 260px;
     margin-bottom: 5px;
 }
-.update,.update_word{
+.update,.update_word,.update_img{
      display: inline-block;
     border:1px solid white ;
     border-radius:5px ;
@@ -65,17 +66,48 @@ ul,a:hover{
     display: block;
     margin-bottom: 5px;
 }
-.box{
-    width: 100%;
-    height: 100%;
-    background-color:#777777;
-    position:absolute;
-    top: 0px;
-    opacity: 0.5;
-     z-index:8;
-    display: none;
-}
+/*.box{*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    background-color:#777777;*/
+/*    position:absolute;*/
+/*    top: 0px;*/
+/*    opacity: 0.5;*/
+/*     z-index:8;*/
+/*    display: none;*/
+/*}*/
 .button_div{
     text-align: center;
     margin: 60px auto;
+}
+/*头像的修改*/
+.uptateImg{
+	width: 300px;
+	background-color:#31b0d5;
+	border-radius: 10px;
+	border: 1px solid #31b0d5;
+	position:fixed;
+	top:50%;
+	left:50%;
+	transform:translateX(-50%) translateY(-50%);
+	display: none;
+	z-index: 8;
+}
+.title_img{
+	display: block;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+.img_btn_div{
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+}
+.img_commit,.imgreset{
+	border: none;
+	border-radius: 2px;
+	width: 100px;
+	height: 30px;
+	color: #269abc;
+	background-color: white;
 }

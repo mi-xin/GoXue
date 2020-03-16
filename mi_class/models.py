@@ -35,3 +35,7 @@ class Reply(models.Model):
     data = models.DateField(verbose_name='评论时间', auto_now_add=True)
     commentUpper = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, verbose_name='上一级评论对象',
                                      related_name='commentUpper')
+class CourseMaterials(models.Model):
+    name = models.CharField(verbose_name='文件名',max_length=100)
+    file = models.FileField(upload_to="CourseMaterials")
+    data = models.ForeignKey(mi_class,related_name='materials',on_delete=models.CASCADE)
