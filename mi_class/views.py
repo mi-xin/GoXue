@@ -107,7 +107,15 @@ def user_class_upload_id(request, class_id):
                 'chapter_object':i,
                 'video_objects':video_objects,
             })
-        return render(request, 'class_admin.html', {'lesson': lesson,'chapter_lists':chapter_lists})
+        # 返回课程相关资料
+        data_list = []
+        try:
+            data_object = CourseMaterials.objects.filter(data_id=lesson)
+            for i in data_object:
+                data_list.append(i)
+        except:
+            data_list= []
+        return render(request, 'class_admin.html', {'lesson': lesson,'chapter_lists':chapter_lists,'data_list':data_list})
     if request.method == 'POST':
         pass
 # 课程的展示
@@ -278,18 +286,32 @@ def comment(request):
                 return HttpResponse('没有课程对象')
             user = request.user
             user_name = user.username
+            headImgUrl = user.userotherinformtion.headImg.url
             comment_object = Comment(lesson=lesson,user=user,content=comment)
             comment_object.save()
             data = comment_object.data
-            return JsonResponse({'code':1, 'comment':comment,'user_name':user_name,'data':data})
+            return JsonResponse({'code':1, 'comment':comment,'user_name':user_name,'data':data,'headImgUrl':headImgUrl})
         else:
             return HttpResponse('失败了')
 # 课程资料文件下载
 def download(request):
-    file = open('static/files/BatchPayTemplate.xls', 'rb')
-    response = FileResponse(file)
-    response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="BatchPayTemplate.xls"'
+    if request.is_ajax():
+        print(11111)
+        fileid = request.POST.get('id')
+        print(id)
+        print(2222)
+        file_object = CourseMaterials.objects.get(id= fileid)
+        print(file_object)
+        file = open(file_object.file.path, 'rb')
+        response = FileResponse(file)
+        print(88)
+        print(response)
+        response['Content-Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = 'attachment;filename="models.py"'
+        # return JsonResponse({'code':1,'response':response})
+        return response
+    else:
+        return JsonResponse({'code':0})
 # 课程资料的上传及删除
 def admin_data(request):
     if request.is_ajax():
