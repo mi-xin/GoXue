@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect,reverse
-from django.http import HttpResponse, JsonResponse, FileResponse
+from django.http import HttpResponse, JsonResponse, StreamingHttpResponse,FileResponse
 import json
 from . models import *
+from GoXue.settings import MEDIA_URL
 from mi_user.models import *
 from django import forms
 from django.core.paginator import Paginator , PageNotAnInteger,EmptyPage
@@ -200,7 +201,6 @@ def class_admin(request):
             chapter_id = request.POST.get('del_id')
             chapter_object = class_chapter.objects.get(id=chapter_id)
             chapter_object.delete()
-            print(chapter_object)
             response = JsonResponse({'code': 1})
             return response
         else:
@@ -294,24 +294,20 @@ def comment(request):
         else:
             return HttpResponse('失败了')
 # 课程资料文件下载
-def download(request):
-    if request.is_ajax():
-        print(11111)
-        fileid = request.POST.get('id')
-        print(id)
-        print(2222)
-        file_object = CourseMaterials.objects.get(id= fileid)
-        print(file_object)
-        file = open(file_object.file.path, 'rb')
-        response = FileResponse(file)
-        print(88)
-        print(response)
-        response['Content-Type'] = 'application/octet-stream'
-        response['Content-Disposition'] = 'attachment;filename="models.py"'
-        # return JsonResponse({'code':1,'response':response})
-        return response
-    else:
-        return JsonResponse({'code':0})
+# def del_data(request):
+#     if request.is_ajax():
+#         fileid = request.POST.get('id')
+#         file_object = CourseMaterials.objects.get(id=fileid)
+#         print(file_object.file)
+#         file = MEDIA_URL+str(file_object.file)
+#         file = open('GoXue/wenjian/CourseMaterials/第一天课堂纪要瑞客论坛_www.ruike1.com_e80KCyl.pdf', 'rb')
+#         response = FileResponse(file)
+#         filename = file_object.name
+#         response['Content-Type'] = 'application/octet-stream'
+#         response['Content-Disposition'] = 'attachment;filename="{0}"'.format(filename)
+#         return response
+#     else:
+#         return JsonResponse({'code':0})
 # 课程资料的上传及删除
 def admin_data(request):
     if request.is_ajax():
@@ -320,11 +316,14 @@ def admin_data(request):
             lesson_boject = mi_class.objects.get(id=id)
             try:
                 files = request.FILES.get('data')
-                print(files)
             except:
                 pass
             data_object = CourseMaterials(file=files, name=files.name, data=lesson_boject)
             data_object.save()
             return JsonResponse({'code':1})
+        if request.POST.get('sign')=='del':
+            id = request.POST.get('id')
+            data_object = CourseMaterials.objects.get(id=id).delete()
+            return JsonResponse({'code': 1})
         else:
             return JsonResponse({'code':0})

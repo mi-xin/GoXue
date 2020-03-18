@@ -166,10 +166,10 @@
                     'sign': 'comment',
                     'csrfmiddlewaretoken': '{{ csrf_token }}',
                 }, success: function (res) {
-                    alert(res.comment)
                     $('.comment_content').prepend(
                         '<li class="class_item">' +
-                            '<div class="userImg" ><img  style="width: 68px;height: 68px;border-radius: 50%" '+ 'src= ' + {{ res.headImgUrl }} + '/></div><div class="userInfon"><span style="color: #31b0d5">'+ {{ res.username }} + '</span><span>'+ {{ res.content }} + '</span><span style="color: #bbb;margin-top: 10px">'+ {{ res.data }} +'</span></div>' +
+                            '<div class="userImg" ><img style="width: 68px;height: 68px;border-radius: 50%" '+ 'src=' + res.headImgUrl +'/>' + '</div>' +
+                            '<div class="userInfon"><span style="color: #31b0d5">'+  res.user_name  + '</span><span>'+  res.comment  + '</span><span style="color: #bbb;margin-top: 10px">'+ res.data  + '</span></div>' +
                         '</li>')
                 }, error: function (res) {
                     alert(res)

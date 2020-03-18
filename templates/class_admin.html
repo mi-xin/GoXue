@@ -62,7 +62,7 @@
         </div>
     </form>
 {# 课程资料 #}
-     <form class="uptatedata" method="post" action="{% url 'mi_class:class_download' %} " enctype="multipart/form-data" multiple=True>
+     <form class="uptatedata" method="post" action="{% url 'mi_class:data_admin' %} " enctype="multipart/form-data" multiple=True>
 {#        {% csrf_token %}#}
         <label class="title_data">课程资料</label>
         <input type="file" name="dataflie" class="title_data"/>
@@ -95,17 +95,17 @@
                     </div>
                 {% if chapter_lists %}
                     {% for i in chapter_lists %}
-                        <tr  style="display: block;margin-top: 10px">
-                            <th>
+                        <tr  style="display: block;margin-top: 10px;width: 100%">
+                            <th style="text-align: center">
                                 第{{ forloop.counter }}章：{{ i.chapter_object.name }}
-                                <span style="position: relative; margin-left: 20px">
+                                <span style="position: relative; margin-left: 20px;">
                                     <button type="button" class="admin_chapter" data-addid={{ i.chapter_object.id }}>管理</button>
                                     <button type="button" class="del_chapter" data-delid={{ i.chapter_object.id }}>删除本章节</button>
                                 </span>
                             </th>
                         </tr>
                         {% for j in i.video_objects %}
-                            <tr class={{ j.id }}>
+                            <tr class={{ j.id }} >
                                 <td>
                                     <spean>{{ j.file_name }}</spean>
                                 </td>
@@ -122,7 +122,9 @@
         </div>
         <div class="tab-pane " id="data">
             {% for i in data_list %}
-               <span>{{ i.name }} </span>  <button class="download" data-id = {{ i.id }}>下载</button>
+                <div>
+                    <span data-id={{ i.id }}><a href={{ i.file.url }}>{{ i.name }}</a> </span>  <button class="del_data" data-id = {{ i.id }}>删除</button>
+                </div>
             {% endfor %}
         </div>
      </div>
@@ -287,23 +289,18 @@
                 }
             });
         });
-        $('.download').on('click', function () {
+        $('.del_data').on('click', function () {
             var id = $(this).data("id");
             $.ajax({
                 type : "post",
-                url : "/class/lesson/download/",
+                url : "/class/lesson/dataadmin/",
                 data : {
                     'id':id,
+                    'sign':'del',
                      'csrfmiddlewaretoken': '{{ csrf_token }}',
                 },
                 success : function(res){
-                    if(res.code ==1){
-                        alert("正在下载文件");
-                    };
-                    if(res.code ==0){
-                          alert(res.error);
-                           window.location.reload()
-                    };
+                    alert("删除成功");
                 }
             });
         });
