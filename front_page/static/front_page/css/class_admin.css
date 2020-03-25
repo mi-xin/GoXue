@@ -23,6 +23,7 @@ ul,a,a:hover{
 .header_li{
      float: left;
 	margin-right: 30px;
+	line-height: 49px;
 }
 .header_li a{
 	color: #337ab7;
@@ -69,7 +70,7 @@ ul,a,a:hover{
 	border-radius: 5px;
 	background-color: #337ab7;
 	color: white;
-	float: right;
+	margin-right: 12px;
 }
 .del_chapter{
 	width: 100px;
@@ -78,7 +79,7 @@ ul,a,a:hover{
 	border-radius: 5px;
 	background-color: #8c8c8c;
 	color: black;
-	float: right;
+	margin-right: 12px;
 }
 
 .btn_add{
@@ -89,10 +90,16 @@ ul,a,a:hover{
 	width: 120px;
 	height: 30px;
 }
+.btn_adta{
+	background-color: #398439;
+	border: none;
+	border-radius: 3px;
+	color: white;
+	width: 120px;
+	height: 30px;
+}
 .video_upload{
-	padding-top: 20px;
 	width: 280px;
-	height: 200px;
 	border-radius: 10px;
 	background-color:#31b0d5;
 	position: absolute;
@@ -103,9 +110,7 @@ ul,a,a:hover{
 	display: none;
 }
 .admin_upload{
-	padding-top: 20px;
 	width: 280px;
-	height: 200px;
 	background-color: #31b0d5;
 	border-radius: 10px;
 	z-index: 8;
@@ -116,7 +121,8 @@ ul,a,a:hover{
 	transform:translateX(-50%) translateY(-50%);
 }
 /*封面的修改*/
-.uptateImg{
+/*上传资料*/
+.uptateImg,.uptatedata{
 	width: 300px;
 	background-color:#31b0d5;
 	border-radius: 10px;
@@ -128,12 +134,12 @@ ul,a,a:hover{
 	display: none;
 	z-index: 8;
 }
-.title_img{
+.title_img,.title_data{
 	display: block;
 	margin-left: 10px;
 	margin-top: 10px;
 }
-.img_btn_div{
+.img_btn_div,.data_btn_div{
 	margin: 10px auto;
 	text-align: center;
 	width: 100%;
@@ -147,7 +153,7 @@ ul,a,a:hover{
 	background-color: white;
 }
 .upload_title{
-	margin-top: 50px;
+	margin-top: 5px;
 	margin-left: 10px;
 }
 .btn_admin{
@@ -162,6 +168,7 @@ ul,a,a:hover{
 	border-radius: 3px;
 	width: 100px;
 	height: 30px;
+	margin-top: 10px;
 	margin-left: 70px;
 	display: block;
 	margin-bottom: 20px;
@@ -189,6 +196,7 @@ ul,a,a:hover{
 	margin: 10px auto;
 	display: block;
 }
+
 /*蒙层css*/
 .box{
     width: 100%;

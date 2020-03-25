@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="/static/front_page/css/index.css">
     <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <link rel="shortcut icon" href="\GoXue\wenjian\img\favicon.ico">
 </head>
 <body>
 <div class="header">
-    <span class="header_left">这是图标的位置</span>
+    <img style="display:inline-block;width: 50px;height: 50px;margin-top: 3px" class="header_left" src="\GoXue\wenjian\img\网站logo.png">
     <span class="header_right">
                 {% if request.user.is_authenticated %}
                     <span class="header_span"><a href="{% url  'mi_class:user_class' sign='all' %}">我的课程</a></span>
@@ -18,8 +19,8 @@
                         <img style="width: 40px;height: 40px;border-radius: 50%" src={{ request.user.userotherinformtion.headImg.url  }}>
                         <a  href="{% url 'mi_user:user_information' %}" >{{ request.user.username }}</a>
                         <ul class="infomation_slect">
-                            <li><a  href="{% url 'mi_user:user_information' %}">个人中心</a></li>
-                            <li><a href="{% url 'mi_user:logout' %}">退出登陆</a></li>
+                            <li><a style="display: block" href="{% url 'mi_user:user_information' %}">个人中心</a></li>
+                            <li><a style="display: block" href="{% url 'mi_user:logout' %}">退出登陆</a></li>
                         </ul>
                     </span>
                 {% else %}

@@ -99,10 +99,10 @@ ul,a:hover{
 }
 .class_item{
 	display: inline-block;
-	width:222px;
+	width:280px;
 	height:180px;
 	/* text-align: center; */
-	margin: 10px;
+	margin: 10px ;
 	overflow:auto;
 	background-color:white;
 }

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/front_page/css/class_admin.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="shortcut icon" href="\GoXue\wenjian\img\favicon.ico">
 </head>
 <body>
 <div class="father_div">
@@ -72,11 +73,11 @@
         </div>
     </form>
      <ul class="nav nav-tabs">
-        <li><a href="#catalog" data-toggle="tab">目录</a></li>
-        <li class="active"><a href="#data" data-toggle="tab">资料</a></li>
+        <li class="active"><a href="#catalog" data-toggle="tab">目录</a></li>
+        <li ><a href="#data" data-toggle="tab">资料</a></li>
     </ul>
      <div class="tab-content">
-        <div class="tab-pane " id="catalog">
+        <div class="tab-pane active" id="catalog">
             <table id="leasson_table">
                     <div class="admin_upload">
                             <form action="{% url 'mi_class:class_admin' %}" method="post" enctype="multipart/form-data" multiple=True>
@@ -122,7 +123,7 @@
         </div>
         <div class="tab-pane " id="data">
             {% for i in data_list %}
-                <div>
+                <div style="padding-left: 80px;padding-top: 15px" class={{ i.id }}data>
                     <span data-id={{ i.id }}><a href={{ i.file.url }}>{{ i.name }}</a> </span>  <button class="del_data" data-id = {{ i.id }}>删除</button>
                 </div>
             {% endfor %}
@@ -208,13 +209,10 @@
             })
         });
         $('.btn_add').on('click', function () {
-            $('.btn_add').on('click', function () {
-                $('.video_upload').css('display', 'block');
-            });
-            $('.cancle_add').on('click', function () {
-                {#$('.box').css('display', 'none');#}
-                $('.video_upload').css('display', 'none');
-            });
+            $('.video_upload').css('display', 'block');
+        });
+        $('.cancle_add').on('click', function () {
+            $('.video_upload').css('display', 'none');
         });
         $('.admin_chapter').on('click', function () {
             var addid = $(this).data("addid");
@@ -301,9 +299,16 @@
                 },
                 success : function(res){
                     alert("删除成功");
+                    $('.'+res.id+'data').parent().remove()
                 }
             });
         });
+         $('.btn_adta').on('click', function () {
+                $('.uptatedata').css('display', 'block');
+            });
+            $('.datareset').on('click', function () {
+                $('.uptatedata').css('display', 'none');
+            });
    });
 </script>
 </body>

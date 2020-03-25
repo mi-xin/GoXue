@@ -8,12 +8,15 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 {#    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>#}
     <script type="text/javascript" src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" href="\GoXue\wenjian\img\favicon.ico">
 </head>
 <body>
 <div class="heade_play">
     <ul class="header_ul">
         <li class="header_li"><a href="{% url 'front_page:front_index' %}">首页</a></li>
-        <li class="header_li"><a href="{% url 'mi_user:user_information' %}">个人中心</a></li>
+        {% if request.user.is_authenticated %}
+            <li class="header_li"><a href="{% url 'mi_user:user_information' %}">个人中心</a></li>
+        {% endif %}
     </ul>
 </div>
 <div id="play_div">
@@ -30,11 +33,12 @@
         <span class="heading" style="margin-left: 20px">{{ lesson.introduce }}</span>
     </div>
     <ul class="nav nav-tabs">
-        <li><a href="#catalog" data-toggle="tab">目录</a></li>
-        <li class="active"><a href="#comment" data-toggle="tab">评论</a></li>
+        <li class="active"><a href="#catalog" data-toggle="tab">目录</a></li>
+        <li ><a href="#data" data-toggle="tab">资料</a></li>
+        <li ><a href="#comment" data-toggle="tab">评论</a></li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane " id="catalog">
+        <div class="tab-pane active" id="catalog">
             <table class="leasson_table">
                 {% if chapter_lists %}
                     {% for i in chapter_lists %}
@@ -50,11 +54,26 @@
                         {% endfor %}
                     {% endfor %}
                 {% else %}
-                    作者比较懒，没有上传视频哦！
+                    <span style="display:block;text-align: center;margin-top: 10px;color: #4cae4c">作者比较懒，没有上传视频哦！</span>
                 {% endif %}
             </table>
         </div>
-        <div class="tab-pane active" id="comment">
+
+        <div class="tab-pane " id="data">
+            <table class="leasson_table">
+                {% if data_list %}
+                    {% for i in data_list %}
+                        <tr style="display: block;margin-top: 10px">
+                            <th style="float: left"><a href={{ i.file.url }}>{{ i.name }}</a></th>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <span style="display:block;text-align: center;margin-top: 10px;color: #4cae4c"> 作者比较懒，没有上传资料哦！</span>
+                {% endif %}
+            </table>
+        </div>
+
+        <div class="tab-pane " id="comment">
             <form action="{% url 'mi_class:class_comment' %}" method="post" class="comment_form">
                 <textarea rows="5" name="comment" placeholder="写下你的想法" class="commtent_context"></textarea>
                 <button type="button" class="comment_button" data-id={{ lesson.id }}>确认评论</button>
@@ -172,8 +191,7 @@
                             '<div class="userInfon"><span style="color: #31b0d5">'+  res.user_name  + '</span><span>'+  res.comment  + '</span><span style="color: #bbb;margin-top: 10px">'+ res.data  + '</span></div>' +
                         '</li>')
                 }, error: function (res) {
-                    alert(res)
-                    alert('失败了')
+                    alert('评论失败啦，记得登陆才可以评论哦')
                 }
             })
         });

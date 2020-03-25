@@ -40,7 +40,9 @@ ul,a,a:hover{
 	display: block;
 	width: 60%;
 	margin: 10px auto;
+	margin-bottom: 0px;
 	position: relative;
+	padding-bottom: 30px;
 }
 .title{
 	display: block;
@@ -60,14 +62,18 @@ ul,a,a:hover{
 	border: none;
 	border-radius: 3px;
 	color: white;
-	margin-left: 20px
+	margin-left: 20px;
+	width: 120px;
+	height: 30px;
 }
 .btn_add{
 	background-color: #398439;
 	border: none;
 	border-radius: 3px;
 	color: white;
-	margin-left: 20px
+	margin-left: 20px;
+	width: 120px;
+	height: 30px;
 }
 .video_upload{
 	width: 280px;
@@ -89,4 +95,13 @@ ul,a,a:hover{
     opacity: 0.5;
      z-index:6;
     display: none;
+}
+/*底部样式*/
+.footer{
+	width:80%;
+	background-color:white;
+	margin: 0px auto;
+	border-top: 1px solid #c9e2b3;
+	text-align: center;
+	padding: 20px 0px;
 }

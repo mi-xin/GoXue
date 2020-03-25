@@ -5,10 +5,17 @@
     <title>个人信息</title>
     <link rel="stylesheet" href="/static/front_page/css/information.css">
     <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <link rel="shortcut icon" href="\GoXue\wenjian\img\favicon.ico">
 </head>
 <body>
+<div class="header">
+        <ul class="header_ul">
+            <li class="header_li"><a href="{% url 'front_page:front_index' %}">首页</a></li>
+{#            <li class="header_li"><a href="{% url 'mi_user:user_information' %}">个人中心</a></li>#}
+        </ul>
+</div>
 <div class="outside_div">
-    <h2 style="text-align: center;color:#31b0d5;padding-top: 20px">
+    <h2 style="text-align: center;color:#31b0d5;padding-top: 20px;">
         个人信息
     </h2>
     <h3 class="title">头像</h3>
@@ -64,6 +71,9 @@
         <button type="reset" class="imgreset">取消上传</button>
     </div>
 </form>
+<div class="footer">软件1731-肖沵鑫的毕业设计<br/>
+    171414337
+</div>
 <script>
     $(document).ready(function () {
         $('.update').on('click', function () {

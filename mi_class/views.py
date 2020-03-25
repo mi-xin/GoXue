@@ -116,6 +116,7 @@ def user_class_upload_id(request, class_id):
                 data_list.append(i)
         except:
             data_list= []
+
         return render(request, 'class_admin.html', {'lesson': lesson,'chapter_lists':chapter_lists,'data_list':data_list})
     if request.method == 'POST':
         pass
@@ -239,6 +240,11 @@ def video_play(request,class_id):
     if request.method == 'GET':
         class_id = class_id
         lesson = mi_class.objects.get(id=class_id)
+        # 资料对象
+        data_list = []
+        data_objects = CourseMaterials.objects.filter(data_id= lesson)
+        for i in data_objects:
+            data_list.append(i)
         # 章节对象
         chapter_lists = []
         chapter_objects = class_chapter.objects.filter(class_model=lesson)
@@ -250,8 +256,7 @@ def video_play(request,class_id):
             })
         # 获取该文章的评论
         comments = lesson.lessonComment.all().order_by('-id')
-        count = comments.count()
-        paginator = Paginator(comments, 2, 0)
+        paginator = Paginator(comments, 6, 0)
         try:
             # GET请求方式，get()获取指定Key值所对应的value值
             # 获取index的值，如果没有，则设置使用默认值1
@@ -262,7 +267,7 @@ def video_play(request,class_id):
             number = paginator.page(1)
         except EmptyPage:
             number = paginator.page(paginator.num_pages)
-        return render(request, 'play.html', {'lesson': lesson,'chapter_lists': chapter_lists,'page':number,'paginator':paginator,})
+        return render(request, 'play.html', {'lesson': lesson,'chapter_lists': chapter_lists,'page':number,'paginator':paginator,'data_list':data_list})
     if request.method == 'POST':
         pass
 # 切换视频播视频的方法
@@ -324,6 +329,6 @@ def admin_data(request):
         if request.POST.get('sign')=='del':
             id = request.POST.get('id')
             data_object = CourseMaterials.objects.get(id=id).delete()
-            return JsonResponse({'code': 1})
+            return JsonResponse({'code': 1,'id':id})
         else:
             return JsonResponse({'code':0})

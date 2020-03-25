@@ -172,7 +172,7 @@ def imgUpdate(request):
             id = request.POST.get('id')
             if request.FILES.getlist('img'):
                 imgfile = request.FILES.getlist('img')[0]
-                suffix = os.path.split(str(imgfile))[1]
+                suffix = os.path.splitext(str(imgfile))[1]
                 suffix_list = ['.png', '.jpg']
                 if suffix in suffix_list:
                     class_boject = mi_class.objects.get(id=id)
@@ -180,13 +180,14 @@ def imgUpdate(request):
                     class_boject.save()
                     return JsonResponse({'code': 1})
                 else:
-                    return JsonResponse({'code': 0, 'error': '文件格式不对'})
+                    return JsonResponse({'code': 0, 'error': '文件格式不对，只支持png和jpg'})
             else:
                 return JsonResponse({'code':0,'error':'未上传图片'})
         elif request.POST.get('sign') == 'header_img':
             if request.FILES.getlist('img'):
                 imgfile = request.FILES.getlist('img')[0]
-                suffix = os.path.split(str(imgfile))[1]
+                suffix = os.path.splitext(str(imgfile))[1]
+                print(suffix)
                 suffix_list = ['.png', '.jpg']
                 if suffix in suffix_list:
                     user_object = request.user
@@ -194,7 +195,7 @@ def imgUpdate(request):
                     user_object.userotherinformtion.save()
                     return JsonResponse({'code': 1})
                 else:
-                    return JsonResponse({'code': 0,'error':'文件格式不对'})
+                    return JsonResponse({'code': 0,'error':'文件格式不对，只支持png和jpg'})
             else:
                 return JsonResponse({'code': 0,'error':'未上传图片'})
         else:

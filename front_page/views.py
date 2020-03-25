@@ -6,7 +6,7 @@ from django.core.paginator import Paginator , PageNotAnInteger,EmptyPage
 # 返回首页视图
 def mi_index(request):
     show_class_all = mi_class.objects.filter(is_active=True,is_release=True)
-    paginator = Paginator(show_class_all, 1, 0)
+    paginator = Paginator(show_class_all, 4, 0)
     try:
         # GET请求方式，get()获取指定Key值所对应的value值
         # 获取index的值，如果没有，则设置使用默认值1
