@@ -117,16 +117,21 @@
                         {% endfor %}
                     {% endfor %}
                 {% else %}
-                    暂无章节
+                    <span style="display: inline-block;width:100%;margin-top: 28px;text-align: center">暂无章节</span>
                 {% endif %}
             </table>
         </div>
         <div class="tab-pane " id="data">
-            {% for i in data_list %}
+            {% if data_list %}
+                {% for i in data_list %}
                 <div style="padding-left: 80px;padding-top: 15px" class={{ i.id }}data>
                     <span data-id={{ i.id }}><a href={{ i.file.url }}>{{ i.name }}</a> </span>  <button class="del_data" data-id = {{ i.id }}>删除</button>
                 </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <span style="display: inline-block;width:100%;margin-top: 28px;margin-bottom:20px;text-align: center">暂无资料</span>
+            {% endif %}
+
         </div>
      </div>
 </div>

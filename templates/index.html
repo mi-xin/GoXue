@@ -42,7 +42,7 @@
     {% for i in page.object_list %}
         <div class="class_item">
             <a href="{% url 'mi_class:video_play_id' class_id=i.id %}">
-            <img class="class_picture" src="{{ i.class_image.url }}" alt="课程封面" width="220px" height="124px"/></a>
+            <img class="class_picture" src="{{ i.class_image.url }}" alt="课程封面" width="220px" height="220px"/></a>
             <spean class="class_title">{{ i.title }}</spean>
             <spean class="class_author">{{ i.author }}</spean>
         </div>
@@ -99,7 +99,6 @@
             {% endif %}
         </ul>
     </div>
-
 </div>
 <div class="footer">软件1731-肖沵鑫的毕业设计<br/>
     171414337

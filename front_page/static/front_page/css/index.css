@@ -100,16 +100,16 @@ ul,a:hover{
 .class_item{
 	display: inline-block;
 	width:280px;
-	height:180px;
-	/* text-align: center; */
+	 text-align: center;
 	margin: 10px ;
 	overflow:auto;
 	background-color:white;
 }
 .class_picture{
 	display: block;
-	width: 220px;
+	width: 124px;
 	height: 124px;
+	margin: 0 auto;
 }
 .class_title{
 	display: block;

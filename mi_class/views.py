@@ -9,7 +9,7 @@ from django.core.paginator import Paginator , PageNotAnInteger,EmptyPage
 # Create your views here.
 import os
 # 课程创建校验
-class Upload_class(forms.Form):
+class UploadClass(forms.Form):
     title = forms.CharField(label="课程名", error_messages={"required": "课程名必填"},)
     introduce = forms.CharField(label="简介", error_messages={"required": "简介必填"})
 # 用户上传课程视图
@@ -21,15 +21,15 @@ def user_class_upload(request):
         class_id = request.POST.get('class_id')
         if class_id is not None:
             sign = 'old'
-            class_boject = mi_class.objects.get(id=class_id)
+            class_boject = MiClass.objects.get(id=class_id)
             chapter_name = request.POST.get('chapter_name')
             # 创建章节对象
-            chapter_object = class_chapter(name=chapter_name, class_model=class_boject)
+            chapter_object = ClassChapter(name=chapter_name, class_model=class_boject)
             chapter_object.save()
             files = request.FILES.getlist('addfile')
         else:
             sign = 'new'
-            upload_form = Upload_class(request.POST)
+            upload_form = UploadClass(request.POST)
             if upload_form.is_valid():
                 # 获取当前登陆的用户id
                 create_user = request.user.uid
@@ -43,36 +43,39 @@ def user_class_upload(request):
                 chapter_name = request.POST.get('chapter_name')
                 if request.FILES.getlist('img'):
                     imgfile = request.FILES.getlist('img')[0]
-                    suffix = os.path.splittext(str(imgfile))[1]
+                    suffix = os.path.splitext(str(imgfile))[1]
                     suffix_list=['.png','.jpg']
                     if suffix in suffix_list:
-                        class_boject = mi_class(title=title, author=author, introduce=introduce, create_user=user,
+                        class_boject = MiClass(title=title, author=author, introduce=introduce, create_user=user,
                                                 class_image=imgfile)
                         class_boject.save()
                     else:
-                        return redirect(reverse('mi_class:user_class_upload_id', args=(class_id,)),)
+                        # return redirect(reverse('mi_class:user_class_upload'))
+                        return render(request, 'user_class_upload.html',{'imgerror':'封面头像支持png和jpg'})
                 else:
                     # 创建课程对象
-                    class_boject = mi_class(title=title, author=author, introduce=introduce, create_user=user)
+                    class_boject = MiClass(title=title, author=author, introduce=introduce, create_user=user)
                     class_boject.save()
                     class_id = str(class_boject.id)
-                    if chapter_name:
-                        # 创建章节对象
-                        chapter_object = class_chapter(name=chapter_name,class_model=class_boject)
-                        chapter_object.save()
-                    else:
-                        lesson = mi_class.objects.get(id=class_boject.id)
-                        return render(request, 'class_admin.html', {'lesson': lesson})
+                if chapter_name:
+                    # 创建章节对象
+                    chapter_object = ClassChapter(name=chapter_name,class_model=class_boject)
+                    chapter_object.save()
+                    print(chapter_object)
+                else:
+                    lesson = MiClass.objects.get(id=class_boject.id)
+                    return render(request, 'class_admin.html', {'lesson': lesson})
             else:
                 # response = {"code": 1, "errors":'不知道为什么错',}
                 # return HttpResponse(json.dumps(response,ensure_ascii=False),content_type="application/json,charset=utf-8")
                 return render(request, "user_class_upload.html", {"code": 0, "errors": upload_form.errors})
         # 遍历上传的文件，并保存
         for i in files:
+            # print(chapter_object)
             bool =str(i).endswith(".mp4")
             if bool:
                 name = i.name
-                voide = mi_voide(file_name=name, file=i, chapter_name=chapter_object)
+                voide = MiVoide(file_name=name, file=i, chapter_name=chapter_object)
                 voide.save()
             else:
                 chapter_object.delete()
@@ -82,10 +85,10 @@ def user_class_upload(request):
                 }
                 return redirect(reverse('mi_class:user_class_upload_id', args=(class_id,)),context)
         # 课程对象
-        lesson = mi_class.objects.get(id=class_boject.id)
+        lesson = MiClass.objects.get(id=class_boject.id)
         # 章节对象
         chapter_lists = []
-        chapter_objects = class_chapter.objects.filter(class_model=lesson)
+        chapter_objects = ClassChapter.objects.filter(class_model=lesson)
         for i in chapter_objects:
             video_objects = i.class_chapter.all()
             chapter_lists.append({
@@ -98,10 +101,10 @@ def user_class_upload_id(request, class_id):
     if request.method == 'GET':
         # 课程对象
         class_id = class_id
-        lesson = mi_class.objects.get(id=class_id)
+        lesson = MiClass.objects.get(id=class_id)
         # 章节对象
         chapter_lists = []
-        chapter_objects = class_chapter.objects.filter(class_model=lesson)
+        chapter_objects = ClassChapter.objects.filter(class_model=lesson)
         for i in chapter_objects:
             video_objects = i.class_chapter.all()
             chapter_lists.append({
@@ -116,7 +119,6 @@ def user_class_upload_id(request, class_id):
                 data_list.append(i)
         except:
             data_list= []
-
         return render(request, 'class_admin.html', {'lesson': lesson,'chapter_lists':chapter_lists,'data_list':data_list})
     if request.method == 'POST':
         pass
@@ -153,14 +155,14 @@ def lesson_admin(request):
         if request.POST.get('sign') == 'del':
             # 前端获取数据
             id = request.POST.get('id')
-            class_object = mi_class.objects.get(id=id)
+            class_object = MiClass.objects.get(id=id)
             class_object.is_active = False
             class_object.save()
             return JsonResponse({'code':1})
         elif request.POST.get('sign') == 'release':
             # 前端获取数据
             id = request.POST.get('id')
-            class_object = mi_class.objects.get(id=id)
+            class_object = MiClass.objects.get(id=id)
             class_object.is_release = True
             class_object.save()
             return JsonResponse({'code':1})
@@ -178,7 +180,7 @@ def class_admin(request):
             class_introduce = request.POST.get('class_introduce')
             class_author = request.POST.get('class_author')
             # 数据库查找对应id的课程
-            class_object = mi_class.objects.get(id=class_id)
+            class_object = MiClass.objects.get(id=class_id)
             if class_object.title != class_title:
                 class_object.title = class_title
             if class_object.introduce != class_introduce:
@@ -195,12 +197,12 @@ def class_admin(request):
             class_id = request.POST.get('class_id')
             del_id = request.POST.get('del_id')
             #  获取课程对象
-            del_object = mi_voide.objects.get(id=del_id).delete()
+            del_object = MiVoide.objects.get(id=del_id).delete()
             response = JsonResponse({'code': 1})
             return response
         elif request.POST.get('sign') =='del_chapter':
             chapter_id = request.POST.get('del_id')
-            chapter_object = class_chapter.objects.get(id=chapter_id)
+            chapter_object = ClassChapter.objects.get(id=chapter_id)
             chapter_object.delete()
             response = JsonResponse({'code': 1})
             return response
@@ -212,21 +214,21 @@ def class_admin(request):
         file = request.FILES.getlist('chapter_file')
         chapter_id = request.POST.get('chapter_id')
         # 获取章节对象
-        chapter_object = class_chapter.objects.get(id=chapter_id)
+        chapter_object = ClassChapter.objects.get(id=chapter_id)
         # 修改章节的名称
         if name and name != chapter_object.name:
             chapter_object.name = name
             chapter_object.save()
         for i in file:
             name = i.name
-            voide = mi_voide(file_name=name, file=i, chapter_name=chapter_object)
+            voide = MiVoide(file_name=name, file=i, chapter_name=chapter_object)
             voide.save()
         lesson_id = chapter_object.class_model_id
         # 课程对象
-        lesson = mi_class.objects.get(id=lesson_id)
+        lesson = MiClass.objects.get(id=lesson_id)
         # 章节对象
         chapter_lists = []
-        chapter_objects = class_chapter.objects.filter(class_model=lesson)
+        chapter_objects = ClassChapter.objects.filter(class_model=lesson)
         for i in chapter_objects:
             video_objects = i.class_chapter.all()
             chapter_lists.append({
@@ -239,7 +241,7 @@ def class_admin(request):
 def video_play(request,class_id):
     if request.method == 'GET':
         class_id = class_id
-        lesson = mi_class.objects.get(id=class_id)
+        lesson = MiClass.objects.get(id=class_id)
         # 资料对象
         data_list = []
         data_objects = CourseMaterials.objects.filter(data_id= lesson)
@@ -247,7 +249,7 @@ def video_play(request,class_id):
             data_list.append(i)
         # 章节对象
         chapter_lists = []
-        chapter_objects = class_chapter.objects.filter(class_model=lesson)
+        chapter_objects = ClassChapter.objects.filter(class_model=lesson)
         for i in chapter_objects:
             video_objects = i.class_chapter.all()
             chapter_lists.append({
@@ -274,7 +276,7 @@ def video_play(request,class_id):
 def switch_play(request):
     if request.method == 'POST':
         play_id = request.POST.get('play_id')
-        play_object = mi_voide.objects.get(id=play_id)
+        play_object = MiVoide.objects.get(id=play_id)
         play_src = play_object.file.url
         response = JsonResponse({'play_src': play_src,})
         return response
@@ -286,7 +288,7 @@ def comment(request):
             comment = request.POST.get('comment')
             lesson_id = request.POST.get('lesson_id')
             try:
-                lesson = mi_class.objects.get(id = lesson_id)
+                lesson = MiClass.objects.get(id = lesson_id)
             except:
                 return HttpResponse('没有课程对象')
             user = request.user
@@ -298,27 +300,13 @@ def comment(request):
             return JsonResponse({'code':1, 'comment':comment,'user_name':user_name,'data':data,'headImgUrl':headImgUrl})
         else:
             return HttpResponse('失败了')
-# 课程资料文件下载
-# def del_data(request):
-#     if request.is_ajax():
-#         fileid = request.POST.get('id')
-#         file_object = CourseMaterials.objects.get(id=fileid)
-#         print(file_object.file)
-#         file = MEDIA_URL+str(file_object.file)
-#         file = open('GoXue/wenjian/CourseMaterials/第一天课堂纪要瑞客论坛_www.ruike1.com_e80KCyl.pdf', 'rb')
-#         response = FileResponse(file)
-#         filename = file_object.name
-#         response['Content-Type'] = 'application/octet-stream'
-#         response['Content-Disposition'] = 'attachment;filename="{0}"'.format(filename)
-#         return response
-#     else:
-#         return JsonResponse({'code':0})
+
 # 课程资料的上传及删除
 def admin_data(request):
     if request.is_ajax():
         if request.POST.get('sign') == 'add':
             id = request.POST.get('id')
-            lesson_boject = mi_class.objects.get(id=id)
+            lesson_boject = MiClass.objects.get(id=id)
             try:
                 files = request.FILES.get('data')
             except:

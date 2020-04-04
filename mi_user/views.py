@@ -12,27 +12,27 @@ import string
 import random
 from GoXue.settings import EMAIL_FROM
 # Create your views here.
-# 登陆注册校验表单
-class miregister(forms.Form):
+# 登陆校验表单
+class Miregister(forms.Form):
     username = forms.CharField(max_length=8, required=True)
     password1 = forms.CharField(max_length=30, required=True)
     password2 = forms.CharField(max_length=30, required=True)
     telephone = forms.CharField(max_length=11, required=True)
-    # email = forms.EmailField()
-class milogin(forms.Form):
+# 登陆校验表单
+class MiLogin(forms.Form):
     password = forms.CharField(max_length=30, required=True)
     telephone = forms.CharField(max_length=11, required=True)
 # 修改密码校验
-class udpassword(forms.Form):
+class Udpassword(forms.Form):
     old_password = forms.CharField(max_length=30, required=True)
     new_password = forms.CharField(max_length=30, required=True)
 # 重置密码邮箱校验
-class forgetpw(forms.Form):
+class Forgetpw(forms.Form):
     email = forms.EmailField(required=True)
 # 登陆视图
 def mi_login(request):
     if request.method == 'POST':
-        form = milogin(request.POST)
+        form = MiLogin(request.POST)
         if form.is_valid():
             telephone = form.cleaned_data.get('telephone')
             password = form.cleaned_data.get('password')
@@ -54,7 +54,7 @@ def mi_register(request):
         return render(request, 'mi_register.html')
     if request.method == 'POST':
         flag = False
-        form = miregister(request.POST)
+        form = Miregister(request.POST)
         if form.is_valid():
             username = request.POST.get('username')
             password1 = request.POST.get('password1')
@@ -77,13 +77,13 @@ def mi_register(request):
                 return render(request, 'mi_login.html',{'code':200,'data':'已注册成功，请登陆。'})
         else:
             return render(request, 'mi_register.html', {'error': '信息不能为空/用户名不能超过8个字符'})
-        return HttpResponse('mixin')
+        return HttpResponse('注册失败哦')
 # 重置密码
 def reset_pw(request):
     if request.method =='GET':
         return render(request, 'forget_pw.html', )
     if request.method == 'POST':
-        form = forgetpw(request.POST)
+        form = Forgetpw(request.POST)
         if form.is_valid():
             flag = False
             email = request.POST.get('email')
@@ -95,6 +95,7 @@ def reset_pw(request):
                 pw = random.sample(strs, 8)
                 new_password = "".join(pw)
                 subject_here = 'GO-学重置密码'
+                # 给用户的邮件内容
                 text_content = '重置后的密码为：' + new_password + ',请保管好新密码，不要给别人。登陆后记得更改密码。'
                 send_mail(subject_here, text_content, EMAIL_FROM, [email], fail_silently=False)
                 user.set_password(new_password)
@@ -110,8 +111,8 @@ def reset_pw(request):
 # 注销用户
 def mi_logout(request):
     logout(request)
-    show_class_all = mi_class.objects.all()
-    paginator = Paginator(show_class_all, 1, 0)
+    show_class_all = MiClass.objects.all()
+    paginator = Paginator(show_class_all, 4, 0)
     try:
         # GET请求方式，get()获取指定Key值所对应的value值
         # 获取index的值，如果没有，则设置使用默认值1
@@ -136,20 +137,16 @@ def update_information(request):
         user_object = User.objects.filter(uid=user_id)[0]
         username = request.POST.get('username')
         email = request.POST.get('email')
-        password = request.POST.get('password')
         if user_object.username != username and username.strip() != '':
             user_object.username = username
         if user_object.email != email and email.strip() != '':
             user_object.email = email
-        # if password != None:
-        #     user_object.set_password('password')
         user_object.save()
-        return HttpResponse('成功')
-
+        return render(request, 'information.html', {'user': user_object}, )
 #修改密码
 def update_password(request):
     if request.method == 'POST':
-        form = udpassword(request.POST)
+        form = Udpassword(request.POST)
         if form.is_valid():
             old_password = request.POST.get('old_password')
             new_password = request.POST.get('new_password')
@@ -166,7 +163,7 @@ def update_password(request):
     else:
         return HttpResponse('未知错误')
 # 图片的修改
-def imgUpdate(request):
+def img_update(request):
     if request.method=='POST':
         if request.POST.get('sign') == 'lesson_img':
             id = request.POST.get('id')
@@ -175,7 +172,7 @@ def imgUpdate(request):
                 suffix = os.path.splitext(str(imgfile))[1]
                 suffix_list = ['.png', '.jpg']
                 if suffix in suffix_list:
-                    class_boject = mi_class.objects.get(id=id)
+                    class_boject = MiClass.objects.get(id=id)
                     class_boject.class_image = imgfile
                     class_boject.save()
                     return JsonResponse({'code': 1})

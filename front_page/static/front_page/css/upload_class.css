@@ -47,6 +47,7 @@ ul,a,a:hover{
 .title{
 	display: block;
 	margin-top: 10px;
+	margin-left: 5px;
 }
 .form_input{
 	display: block;
@@ -77,13 +78,27 @@ ul,a,a:hover{
 }
 .video_upload{
 	width: 280px;
-	height: 280px;
-	background-color: #8c8c8c;
+	background-color: #31b0d5;
 	position: absolute;
 	top: 100px;
 	left: 240px;
 	z-index: 8;
 	display: none;
+	border-radius: 3px;
+}
+.btn_video{
+	text-align: center;
+	margin: 10px auto;
+}
+.commit_add,.cancle_add{
+	border: none;
+	border-radius: 2px;
+	width: 100px;
+	height: 30px;
+	color: #269abc;
+	background-color: white;
+	margin: 10px auto;
+	text-align: center;
 }
 /*蒙层css*/
 .box{

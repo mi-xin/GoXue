@@ -44,21 +44,22 @@ ul,a,a:hover{
 .title_cont{
     padding-left: 30px;
 }
-.update_div,.update_password{
-    width: 260px;
-    background-color:#31b0d5;
-    margin: 40px auto;
-    padding-top: 20px;
-    padding-left: 30px;
-    padding-right: 30px;
-    position:relative;
-    top:-330px;
-    display:none;
-    z-index:9;
-}
+/*.update_div,.update_password{*/
+/*    width: 260px;*/
+/*    background-color:#31b0d5;*/
+/*    margin: 40px auto;*/
+/*    padding-top: 20px;*/
+/*    padding-left: 30px;*/
+/*    padding-right: 30px;*/
+/*    position:relative;*/
+/*    top:-330px;*/
+/*    display:none;*/
+/*    z-index:9;*/
+/*}*/
 .form_input{
     width: 260px;
     margin-bottom: 5px;
+    margin-left: 10px;
 }
 .update,.update_word,.update_img{
      display: inline-block;
@@ -86,6 +87,7 @@ ul,a,a:hover{
 .update_laber{
     display: block;
     margin-bottom: 5px;
+    margin-left: 5px;
 }
 /*.box{*/
 /*    width: 100%;*/
@@ -102,7 +104,7 @@ ul,a,a:hover{
     margin: 60px auto;
 }
 /*头像的修改*/
-.uptateImg{
+.uptateImg,.update_div,.update_password{
 	width: 300px;
 	background-color:#31b0d5;
 	border-radius: 10px;
@@ -114,7 +116,7 @@ ul,a,a:hover{
 	display: none;
 	z-index: 8;
 }
-.title_img{
+.title_img,.update_laber,.new_password{
 	display: block;
 	margin-left: 10px;
 	margin-top: 10px;

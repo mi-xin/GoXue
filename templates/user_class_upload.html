@@ -13,6 +13,7 @@
     <div class="header">
         <ul class="header_ul">
             <li class="header_li"><a href="{% url 'front_page:front_index' %}">首页</a></li>
+            <li class="header_li"><a href="{% url  'mi_class:user_class' sign='all' %}">我的课程</a></li>
             <li class="header_li"><a href="{% url 'mi_user:user_information' %}">个人中心</a></li>
         </ul>
     </div>
@@ -28,7 +29,7 @@
     <input type="text" name="author" placeholder="请输入作者" class="form_input"/>
           <laber class="title">课程简介</laber>{% if code == 1 %}<span style="color: red">{{ errors.introduce}}</span>{% endif %}
       <textarea cols="20" rows="20" name="introduce" placeholder="请描述下课程简介" class="form_input"></textarea>
-    <label class="title">上传课程封面</label>
+    <label class="title">上传课程封面(只支持上传png/jpg格式)</label><span style="color: red">{{ imgerror }}</span>
     <input name="img" type="file" placeholder="上传封面" class="form_input">
     <label class="title">章节</label>
         <button type='button' class="btn_add">添加章节</button>
@@ -37,8 +38,10 @@
         <input class="chapter_input form_input" name="chapter_name" placeholder="请输入章节的名称" />
         <label class="title">上传相关文件</label>
         <input type="file" name="myfile" multiple=True placeholder="上传视频" class="form_input"/>
-        <button type="submit" class="commit_add">确认上传</button>
-        <button type="button" class="cancle_add">取消上传</button>
+        <div class="btn_video">
+            <button type="submit" class="commit_add">确认上传</button>
+            <button type="button" class="cancle_add">取消上传</button>
+        </div>
     </div>
     <div class="btn_div">
         <button type="submit"  class="btn_cmmit">确认上传</button>
@@ -50,9 +53,9 @@
 <div class="footer">软件1731-肖沵鑫的毕业设计<br/>
         171414337
     </div>
-<div class="box">
-
-</div>
+{#<div class="box">#}
+{##}
+{#</div>#}
 <script>
     $(document).ready(function(){
         $('.btn_add').on('click',function(){

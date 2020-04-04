@@ -28,12 +28,9 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser,PermissionsMixin):
     uid = ShortUUIDField(primary_key=True)
     username = models.CharField(max_length=18, verbose_name='用户名')
-    # password = models.CharField(verbose_name='密码,', max_length=30)
     telephone = models.CharField(max_length=11, unique=True, verbose_name='手机号码')
     email = models.EmailField(unique=True, verbose_name='邮箱',null=True)
     is_active = models.BooleanField(default=True, verbose_name='是否为激活用户')
-    # is_student = models.BooleanField(default=False, verbose_name='是否为学生')
-    # is_teacher = models.BooleanField(default=False, verbose_name='是否为教师')
     is_staff = models.BooleanField(default=False, verbose_name='是否为员工')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
