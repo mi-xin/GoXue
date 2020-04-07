@@ -157,11 +157,11 @@ def update_password(request):
                 user_object.save()
                 return render(request, 'mi_login.html')
             else:
-                return HttpResponse('旧密码错误')
+                return render(request, 'error.html',{'error':'旧密码错误'})
         else:
-            return HttpResponse('未知错误')
+            return render(request, 'error.html',{'error':'表单不能为空'})
     else:
-        return HttpResponse('未知错误')
+        return render(request, 'error.html', {'error': '未知错误'})
 # 图片的修改
 def img_update(request):
     if request.method=='POST':
@@ -198,4 +198,4 @@ def img_update(request):
         else:
             return JsonResponse({'code': 0})
     else:
-        return HttpResponse('出现错误了')
+        return render(request, 'error.html', {'error': '未知错误'})
