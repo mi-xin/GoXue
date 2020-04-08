@@ -198,4 +198,4 @@ def img_update(request):
         else:
             return JsonResponse({'code': 0})
     else:
-        return render(request, 'error.html', {'error': '未知错误'})
+        return render(request, 'error.html', {'error': '未知错误'} )

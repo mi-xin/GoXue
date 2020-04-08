@@ -86,7 +86,7 @@ def user_class_upload(request):
                 return redirect(reverse('mi_class:user_class_upload_id', args=(class_id,)),context)
         # 课程对象
         lesson = MiClass.objects.get(id=class_boject.id)
-        # 章节对象
+        #  章节对象
         chapter_lists = []
         chapter_objects = ClassChapter.objects.filter(class_model=lesson)
         for i in chapter_objects:
