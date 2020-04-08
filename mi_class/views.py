@@ -148,7 +148,7 @@ def user_class(request,sign):
             number = paginator.page(paginator.num_pages)
         return render(request, 'user_class.html', {'page':number,'paginator':paginator,'sign':sign})
     else:
-        return HttpResponse('出现问题了')
+        return render(request, 'error.html', {'error': '出现问题了'}, )
 # 课程的删除与发布的管理
 def lesson_admin(request):
     if request.is_ajax():
@@ -169,7 +169,7 @@ def lesson_admin(request):
         else:
             return JsonResponse({'code':0})
     else:
-        return HttpResponse('操作有误')
+        return render(request, 'error.html', {'error': '操作有误'}, )
 # 课程视频管理(课程信息的修改/视频的增加删除/章节的删除/章节信息的修改及章节的增加)
 def class_admin(request):
     if request.is_ajax():
@@ -207,7 +207,7 @@ def class_admin(request):
             response = JsonResponse({'code': 1})
             return response
         else:
-            return HttpResponse('操作有误')
+            return render(request, 'error.html', {'error': '操作有误'}, )
     else:
         # 前端获取要修改的章节名称/文件
         name = request.POST.get('updata_chapter_name')
@@ -290,7 +290,7 @@ def comment(request):
             try:
                 lesson = MiClass.objects.get(id = lesson_id)
             except:
-                return HttpResponse('没有课程对象')
+                return render(request, 'error.html', {'error': '未找到该课程'}, )
             user = request.user
             user_name = user.username
             headImgUrl = user.userotherinformtion.headImg.url
@@ -299,7 +299,7 @@ def comment(request):
             data = comment_object.data
             return JsonResponse({'code':1, 'comment':comment,'user_name':user_name,'data':data,'headImgUrl':headImgUrl})
         else:
-            return HttpResponse('失败了')
+            return render(request, 'error.html', {'error': '评论失败哦'}, )
 
 # 课程资料的上传及删除
 def admin_data(request):
