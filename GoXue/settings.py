@@ -159,7 +159,7 @@ EMAIL_PORT=465
 #SMTP服务器的账号
 EMAIL_HOST_USER='740085748@qq.com'
 # SMTP服务器授权码
-EMAIL_HOST_PASSWORD='kcazdhnkfkbkbefa'
+EMAIL_HOST_PASSWORD=''
 #收件人看到的发件人
 EMAIL_FROM = 'Go学<740085748@qq.com>'
 #是否使用隐式TLS安全连接
